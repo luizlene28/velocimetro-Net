@@ -41,7 +41,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Container Principal */
         .app-container {
             width: 100%;
             max-width: 420px;
@@ -63,7 +62,6 @@
             background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
         }
 
-        /* Header */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -96,7 +94,6 @@
             border: 1px solid #d1d9ff;
         }
 
-        /* Velocímetro Container */
         .speedometer-wrapper {
             position: relative;
             width: 100%;
@@ -111,7 +108,6 @@
             display: block;
         }
 
-        /* Speed Display */
         .speed-digital {
             text-align: center;
             margin-bottom: 20px;
@@ -133,7 +129,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -174,15 +169,9 @@
             margin-top: 2px;
         }
 
-        .positive {
-            color: var(--success);
-        }
+        .positive { color: var(--success); }
+        .negative { color: var(--danger); }
 
-        .negative {
-            color: var(--danger);
-        }
-
-        /* Network Type */
         .network-indicator {
             background: #f0fdf4;
             border: 1px solid #bbf7d0;
@@ -212,7 +201,6 @@
             border-radius: 2px;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -239,28 +227,12 @@
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
-        .btn-primary:hover {
-            background: #5a6fd6;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-        }
-
         .btn-outline {
             background: white;
             color: var(--text-primary);
             border: 2px solid var(--border);
         }
 
-        .btn-outline:hover {
-            border-color: #667eea;
-            color: #667eea;
-        }
-
-        .btn:active {
-            transform: scale(0.96);
-        }
-
-        /* Status Bar */
         .status-bar {
             display: flex;
             justify-content: space-between;
@@ -296,55 +268,6 @@
             color: var(--text-secondary);
         }
 
-        /* Responsividade para Desktop */
-        @media (min-width: 768px) {
-            .app-container {
-                max-width: 480px;
-                padding: 32px 28px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .speed-value {
-                font-size: 64px;
-            }
-            
-            .btn {
-                font-size: 14px;
-                padding: 14px 20px;
-            }
-            
-            .speedometer-wrapper {
-                max-width: 380px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .app-container {
-                padding: 20px 16px;
-            }
-            
-            .speed-value {
-                font-size: 48px;
-            }
-            
-            .stat-value {
-                font-size: 18px;
-            }
-            
-            .btn {
-                padding: 10px 12px;
-                font-size: 12px;
-            }
-            
-            .speedometer-wrapper {
-                max-width: 280px;
-            }
-        }
-
-        /* Dark Mode Support */
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-primary: #1a1a2e;
@@ -353,44 +276,16 @@
                 --text-secondary: #a0a0a0;
                 --border: #2a2a4a;
             }
-            
-            body {
-                background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
-            }
-            
-            .stat-card {
-                background: #1e2a4a;
-            }
-            
-            .stat-card:hover {
-                background: #243356;
-            }
-            
-            .btn-outline {
-                background: #16213e;
-                color: #e0e0e0;
-            }
-            
-            .network-indicator {
-                background: #1a2e1a;
-                border-color: #2a4a2a;
-            }
-            
-            .network-type {
-                color: #4ade80;
-            }
-            
-            .provider-badge {
-                background: #1e1e3a;
-                color: #818cf8;
-                border-color: #2e2e5a;
-            }
+            body { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); }
+            .stat-card { background: #1e2a4a; }
+            .btn-outline { background: #16213e; color: #e0e0e0; }
+            .network-indicator { background: #1a2e1a; border-color: #2a4a2a; }
+            .network-type { color: #4ade80; }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <div class="app-header">
             <div>
                 <div class="app-title">NetSpeed Pro</div>
@@ -399,18 +294,15 @@
             <div class="provider-badge">🌐 Fiber</div>
         </div>
 
-        <!-- Velocímetro -->
         <div class="speedometer-wrapper">
             <canvas id="speedometer" width="380" height="380"></canvas>
         </div>
 
-        <!-- Velocidade Digital -->
         <div class="speed-digital">
             <div class="speed-value" id="speedValue">0</div>
             <div class="speed-unit">Megabits por segundo</div>
         </div>
 
-        <!-- Grade de Estatísticas -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">📊 Download</div>
@@ -434,31 +326,16 @@
             </div>
         </div>
 
-        <!-- Indicador de Rede -->
         <div class="network-indicator">
             <div class="network-type" id="networkType">📱 5G - Conectado</div>
-            <div class="network-signal">
-                <div class="signal-bar" style="height: 12px;"></div>
-                <div class="signal-bar" style="height: 16px;"></div>
-                <div class="signal-bar" style="height: 20px;"></div>
-                <div class="signal-bar" style="height: 24px;"></div>
-            </div>
         </div>
 
-        <!-- Botões de Ação -->
         <div class="action-buttons">
-            <button class="btn btn-primary" onclick="startSpeedTest()">
-                🚀 Testar Velocidade
-            </button>
-            <button class="btn btn-outline" onclick="resetData()">
-                🔄 Resetar
-            </button>
-            <button class="btn btn-outline" onclick="changeNetwork()">
-                📡 Rede
-            </button>
+            <button class="btn btn-primary" id="btnTest" onclick="startSpeedTest()">🚀 Testar Velocidade</button>
+            <button class="btn btn-outline" onclick="resetData()">🔄 Resetar</button>
+            <button class="btn btn-outline" onclick="changeNetwork()">📡 Rede</button>
         </div>
 
-        <!-- Barra de Status -->
         <div class="status-bar">
             <div class="connection-status">
                 <div class="status-dot"></div>
@@ -469,21 +346,11 @@
     </div>
 
     <script>
-        // Estado da aplicação
         const state = {
-            currentSpeed: 0,
-            downloadSpeed: 0,
-            uploadSpeed: 0,
-            peakSpeed: 0,
-            latency: 0,
-            speedHistory: [],
-            animationId: null,
-            targetSpeed: 0,
-            networkType: '5G',
-            isTestRunning: false
+            currentSpeed: 0, downloadSpeed: 0, uploadSpeed: 0, peakSpeed: 0,
+            latency: 0, targetSpeed: 0, isTestRunning: false, networkType: '5G'
         };
 
-        // Elementos DOM
         const canvas = document.getElementById('speedometer');
         const ctx = canvas.getContext('2d');
         const speedValue = document.getElementById('speedValue');
@@ -491,279 +358,90 @@
         const uploadSpeed = document.getElementById('uploadSpeed');
         const peakSpeed = document.getElementById('peakSpeed');
         const latency = document.getElementById('latency');
-        const networkType = document.getElementById('networkType');
-        const lastUpdate = document.getElementById('lastUpdate');
 
-        // Desenhar velocímetro com escala até 800 Mbps
         function drawSpeedometer(speed) {
-            const width = canvas.width;
-            const height = canvas.height;
-            const centerX = width / 2;
-            const centerY = height / 2;
-            const radius = Math.min(width, height) * 0.38;
-
-            ctx.clearRect(0, 0, width, height);
-
-            // Fundo do velocímetro
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius + 20, 0, Math.PI * 2);
-            const bgGradient = ctx.createRadialGradient(centerX, centerY, radius * 0.5, centerX, centerY, radius + 20);
-            bgGradient.addColorStop(0, '#ffffff');
-            bgGradient.addColorStop(1, '#f1f5f9');
-            ctx.fillStyle = bgGradient;
-            ctx.fill();
-            
-            // Borda suave
-            ctx.strokeStyle = '#e2e8f0';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Arco do velocímetro (0-800 Mbps em 240°)
-            const startAngle = Math.PI * 0.7;
-            const endAngle = Math.PI * 2.3;
+            const centerX = 190, centerY = 190, radius = 145;
+            ctx.clearRect(0, 0, 380, 380);
+            const startAngle = Math.PI * 0.7, endAngle = Math.PI * 2.3;
             const totalAngle = endAngle - startAngle;
             const maxSpeed = 800;
 
-            // Faixas de velocidade
-            const zones = [
-                { start: 0, end: 200, color: '#e2e8f0' },
-                { start: 200, end: 400, color: '#bfdbfe' },
-                { start: 400, end: 600, color: '#93c5fd' },
-                { start: 600, end: 800, color: '#60a5fa' }
-            ];
-
-            zones.forEach(zone => {
-                const zoneStart = startAngle + (zone.start / maxSpeed) * totalAngle;
-                const zoneEnd = startAngle + (zone.end / maxSpeed) * totalAngle;
-                
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius - 10, zoneStart, zoneEnd);
-                ctx.strokeStyle = zone.color;
-                ctx.lineWidth = 12;
-                ctx.stroke();
-            });
-
-            // Marcações e números
-            for (let i = 0; i <= maxSpeed; i += 40) {
-                const angle = startAngle + (i / maxSpeed) * totalAngle;
-                const isMajor = i % 200 === 0;
-                const isMedium = i % 100 === 0 && !isMajor;
-                const isMinor = i % 40 === 0 && !isMajor && !isMedium;
-                
-                let tickLength;
-                if (isMajor) tickLength = 22;
-                else if (isMedium) tickLength = 16;
-                else tickLength = 10;
-
-                const x1 = centerX + Math.cos(angle) * (radius - tickLength);
-                const y1 = centerY + Math.sin(angle) * (radius - tickLength);
-                const x2 = centerX + Math.cos(angle) * radius;
-                const y2 = centerY + Math.sin(angle) * radius;
-
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.strokeStyle = isMajor ? '#1e293b' : isMedium ? '#64748b' : '#94a3b8';
-                ctx.lineWidth = isMajor ? 2.5 : isMedium ? 1.8 : 1.2;
-                ctx.stroke();
-
-                // Números (apenas valores principais e médios)
-                if (isMajor || isMedium) {
-                    const numX = centerX + Math.cos(angle) * (radius - 34);
-                    const numY = centerY + Math.sin(angle) * (radius - 34);
-                    
-                    ctx.fillStyle = isMajor ? '#1e293b' : '#475569';
-                    ctx.font = isMajor ? '700 13px -apple-system, sans-serif' : '500 11px -apple-system, sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(i.toString(), numX, numY);
-                }
-            }
-
-            // Marca "Mbps" no centro inferior
-            ctx.fillStyle = '#64748b';
-            ctx.font = '500 10px -apple-system, sans-serif';
-            ctx.textAlign = 'center';
-            const mbpsLabelX = centerX + Math.cos(startAngle + totalAngle/2) * (radius + 30);
-            const mbpsLabelY = centerY + Math.sin(startAngle + totalAngle/2) * (radius + 30);
-            ctx.fillText('Mbps', mbpsLabelX, mbpsLabelY);
-
-            // Ponteiro
-            const speedAngle = startAngle + (Math.min(speed, maxSpeed) / maxSpeed) * totalAngle;
-            
-            // Sombra do ponteiro
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-            ctx.shadowBlur = 10;
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-
-            // Ponteiro principal
             ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.lineTo(
-                centerX + Math.cos(speedAngle) * (radius - 45),
-                centerY + Math.sin(speedAngle) * (radius - 45)
-            );
-            ctx.strokeStyle = '#3b82f6';
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            ctx.stroke();
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 12; ctx.stroke();
 
-            // Reset shadow para o centro
-            ctx.shadowColor = 'transparent';
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-
-            // Centro do ponteiro
+            const activeAngle = startAngle + (Math.min(speed, maxSpeed) / maxSpeed) * totalAngle;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 10, 0, Math.PI * 2);
-            const centerGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 10);
-            centerGradient.addColorStop(0, '#ffffff');
-            centerGradient.addColorStop(1, '#e2e8f0');
-            ctx.fillStyle = centerGradient;
-            ctx.fill();
-            ctx.strokeStyle = '#cbd5e1';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            ctx.arc(centerX, centerY, radius, startAngle, activeAngle);
+            ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 12; ctx.stroke();
 
-            // Ponto central
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(activeAngle);
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 4, 0, Math.PI * 2);
-            ctx.fillStyle = '#3b82f6';
-            ctx.fill();
-
-            // Valor atual no centro
-            ctx.fillStyle = '#1e293b';
-            ctx.font = '700 16px -apple-system, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(Math.round(speed) + ' Mbps', centerX, centerY + 55);
+            ctx.moveTo(0, -4); ctx.lineTo(radius - 20, 0); ctx.lineTo(0, 4);
+            ctx.fillStyle = '#1e293b'; ctx.fill();
+            ctx.restore();
         }
 
-        // Animação suave
         function animateSpeed() {
             const diff = state.targetSpeed - state.currentSpeed;
-            
             if (Math.abs(diff) > 0.1) {
                 state.currentSpeed += diff * 0.1;
-                updateDisplay(state.currentSpeed);
-                state.animationId = requestAnimationFrame(animateSpeed);
-            } else {
-                state.currentSpeed = state.targetSpeed;
-                updateDisplay(state.currentSpeed);
+                speedValue.textContent = Math.round(state.currentSpeed);
+                drawSpeedometer(state.currentSpeed);
+                requestAnimationFrame(animateSpeed);
             }
         }
 
-        // Atualizar display
-        function updateDisplay(speed) {
-            const roundedSpeed = Math.round(speed);
-            speedValue.textContent = roundedSpeed;
-            downloadSpeed.textContent = roundedSpeed;
-            
-            // Simular upload e latência
-            const uploadVal = Math.round(speed * 0.4 + Math.random() * 5);
-            uploadSpeed.textContent = uploadVal;
-            
-            latency.textContent = Math.round(15 + Math.random() * 25);
-            
-            drawSpeedometer(speed);
-        }
-
-        // Simular teste de velocidade
         function startSpeedTest() {
             if (state.isTestRunning) return;
-            
             state.isTestRunning = true;
-            const testButton = document.querySelector('.btn-primary');
-            testButton.textContent = '⏳ Testando...';
-            testButton.disabled = true;
-            
+            document.getElementById('btnTest').textContent = '⏳ Analisando...';
+
             let progress = 0;
             const testInterval = setInterval(() => {
                 progress += Math.random() * 80;
-                
-                if (progress >= 800) {
-                    progress = 800;
-                    clearInterval(testInterval);
-                    state.targetSpeed = 600 + Math.random() * 200;
-                    state.isTestRunning = false;
-                    testButton.textContent = '🚀 Testar Velocidade';
-                    testButton.disabled = false;
-                    
-                    if (state.targetSpeed > state.peakSpeed) {
-                        state.peakSpeed = state.targetSpeed;
-                        peakSpeed.textContent = Math.round(state.peakSpeed);
-                    }
-                    
-                    lastUpdate.textContent = 'Último teste: ' + new Date().toLocaleTimeString();
-                } else {
-                    state.targetSpeed = progress;
-                }
-                
+                state.targetSpeed = progress;
                 animateSpeed();
+
+                if (progress >= 800) {
+                    clearInterval(testInterval);
+                    const finalD = Math.round(600 + Math.random() * 150);
+                    const finalU = Math.round(finalD * 0.6);
+                    const finalP = Math.round(10 + Math.random() * 10);
+                    
+                    state.targetSpeed = finalD;
+                    state.isTestRunning = false;
+                    document.getElementById('btnTest').textContent = '🚀 Testar Velocidade';
+                    
+                    downloadSpeed.textContent = finalD;
+                    uploadSpeed.textContent = finalU;
+                    latency.textContent = finalP;
+                    if(finalD > state.peakSpeed) { state.peakSpeed = finalD; peakSpeed.textContent = finalD; }
+                    document.getElementById('lastUpdate').textContent = 'Último: ' + new Date().toLocaleTimeString();
+
+                    // ENVIO PARA KODULAR
+                    if (window.AppInventor) {
+                        window.AppInventor.setWebViewString(finalD + "|" + finalU + "|" + finalP);
+                    }
+                }
             }, 100);
         }
 
-        // Resetar dados
         function resetData() {
-            state.targetSpeed = 0;
-            state.peakSpeed = 0;
-            state.downloadSpeed = 0;
-            state.uploadSpeed = 0;
-            state.latency = 0;
-            state.speedHistory = [];
-            
-            peakSpeed.textContent = '0';
-            lastUpdate.textContent = 'Último teste: --:--';
-            
-            animateSpeed();
+            state.targetSpeed = 0; animateSpeed();
+            downloadSpeed.textContent = '0'; uploadSpeed.textContent = '0';
+            latency.textContent = '0'; peakSpeed.textContent = '0';
         }
 
-        // Mudar rede
         function changeNetwork() {
-            const networks = ['5G', '4G LTE', 'WiFi 6', 'Fibra'];
-            const currentIndex = networks.indexOf(state.networkType);
-            state.networkType = networks[(currentIndex + 1) % networks.length];
-            
-            const emojis = {
-                '5G': '📱',
-                '4G LTE': '📶',
-                'WiFi 6': '📡',
-                'Fibra': '🌐'
-            };
-            
-            networkType.textContent = `${emojis[state.networkType]} ${state.networkType} - Conectado`;
-            
-            // Resetar e simular nova velocidade
-            resetData();
-            setTimeout(() => {
-                state.targetSpeed = Math.random() * 600 + 100;
-                animateSpeed();
-            }, 500);
+            const nets = ['5G', '4G LTE', 'Fiber'];
+            state.networkType = nets[(nets.indexOf(state.networkType) + 1) % nets.length];
+            document.getElementById('networkType').textContent = '📱 ' + state.networkType + ' - Conectado';
         }
 
-        // Inicialização
-        function init() {
-            drawSpeedometer(0);
-            
-            // Simular velocidade inicial
-            setTimeout(() => {
-                state.targetSpeed = 300 + Math.random() * 300;
-                animateSpeed();
-                lastUpdate.textContent = 'Último teste: ' + new Date().toLocaleTimeString();
-            }, 1000);
-            
-            // Atualização periódica
-            setInterval(() => {
-                if (!state.isTestRunning && state.currentSpeed > 0) {
-                    state.targetSpeed = Math.max(0, Math.min(800, state.targetSpeed + (Math.random() - 0.5) * 50));
-                    animateSpeed();
-                }
-            }, 3000);
-        }
-
-        // Iniciar aplicação
-        init();
+        drawSpeedometer(0);
     </script>
 </body>
 </html>
