@@ -333,7 +333,6 @@
         <div class="action-buttons">
             <button class="btn btn-primary" id="btnTest" onclick="startSpeedTest()">🚀 Testar Velocidade</button>
             <button class="btn btn-outline" onclick="resetData()">🔄 Resetar</button>
-            <button class="btn btn-outline" onclick="changeNetwork()">📡 Rede</button>
         </div>
 
         <div class="status-bar">
@@ -348,7 +347,7 @@
     <script>
         const state = {
             currentSpeed: 0, downloadSpeed: 0, uploadSpeed: 0, peakSpeed: 0,
-            latency: 0, targetSpeed: 0, isTestRunning: false, networkType: '5G'
+            latency: 0, targetSpeed: 0, isTestRunning: false
         };
 
         const canvas = document.getElementById('speedometer');
@@ -407,9 +406,9 @@
 
                 if (progress >= 800) {
                     clearInterval(testInterval);
-                    const finalD = Math.round(600 + Math.random() * 150);
-                    const finalU = Math.round(finalD * 0.6);
-                    const finalP = Math.round(10 + Math.random() * 10);
+                    const finalD = Math.round(550 + Math.random() * 200);
+                    const finalU = Math.round(finalD * 0.5);
+                    const finalP = Math.round(10 + Math.random() * 15);
                     
                     state.targetSpeed = finalD;
                     state.isTestRunning = false;
@@ -421,9 +420,10 @@
                     if(finalD > state.peakSpeed) { state.peakSpeed = finalD; peakSpeed.textContent = finalD; }
                     document.getElementById('lastUpdate').textContent = 'Último: ' + new Date().toLocaleTimeString();
 
-                    // ENVIO PARA KODULAR
+                    // --- ALTERAÇÃO SILENCIOSA PARA KODULAR ---
+                    const dadosFinais = "" + finalD + "|" + finalU + "|" + finalP;
                     if (window.AppInventor) {
-                        window.AppInventor.setWebViewString(finalD + "|" + finalU + "|" + finalP);
+                        window.AppInventor.setWebViewString(dadosFinais);
                     }
                 }
             }, 100);
@@ -433,12 +433,6 @@
             state.targetSpeed = 0; animateSpeed();
             downloadSpeed.textContent = '0'; uploadSpeed.textContent = '0';
             latency.textContent = '0'; peakSpeed.textContent = '0';
-        }
-
-        function changeNetwork() {
-            const nets = ['5G', '4G LTE', 'Fiber'];
-            state.networkType = nets[(nets.indexOf(state.networkType) + 1) % nets.length];
-            document.getElementById('networkType').textContent = '📱 ' + state.networkType + ' - Conectado';
         }
 
         drawSpeedometer(0);
