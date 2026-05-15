@@ -399,13 +399,19 @@
             document.getElementById('btnTest').textContent = '⏳ Analisando...';
 
             let progress = 0;
+            let testCompleted = false; // Trava de segurança para enviar apenas 1 vez
+
             const testInterval = setInterval(() => {
+                if (testCompleted) return;
+
                 progress += Math.random() * 80;
                 state.targetSpeed = progress;
                 animateSpeed();
 
                 if (progress >= 800) {
+                    testCompleted = true; // Trava o código aqui
                     clearInterval(testInterval);
+                    
                     const finalD = Math.round(550 + Math.random() * 200);
                     const finalU = Math.round(finalD * 0.5);
                     const finalP = Math.round(10 + Math.random() * 15);
@@ -417,11 +423,16 @@
                     downloadSpeed.textContent = finalD;
                     uploadSpeed.textContent = finalU;
                     latency.textContent = finalP;
-                    if(finalD > state.peakSpeed) { state.peakSpeed = finalD; peakSpeed.textContent = finalD; }
+                    
+                    if(finalD > state.peakSpeed) { 
+                        state.peakSpeed = finalD; 
+                        peakSpeed.textContent = finalD; 
+                    }
+                    
                     document.getElementById('lastUpdate').textContent = 'Último: ' + new Date().toLocaleTimeString();
 
-                    // --- ALTERAÇÃO SILENCIOSA PARA KODULAR ---
-                    const dadosFinais = "" + finalD + "|" + finalU + "|" + finalP;
+                    // --- ENVIO TOTALMENTE LIMPO, TRATADO E ESTÁVEL PARA O KODULAR ---
+                    const dadosFinais = String(finalD) + "|" + String(finalU) + "|" + String(finalP);
                     if (window.AppInventor) {
                         window.AppInventor.setWebViewString(dadosFinais);
                     }
