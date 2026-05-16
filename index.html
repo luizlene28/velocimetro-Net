@@ -67,19 +67,10 @@
         }
 
         @keyframes particlesFloat {
-            0%,
-            100% {
-                opacity: 0.6;
-            }
-            25% {
-                opacity: 0.9;
-            }
-            50% {
-                opacity: 0.5;
-            }
-            75% {
-                opacity: 0.8;
-            }
+            0%, 100% { opacity: 0.6; }
+            25% { opacity: 0.9; }
+            50% { opacity: 0.5; }
+            75% { opacity: 0.8; }
         }
 
         .app-container {
@@ -111,29 +102,6 @@
             border-radius: 36px 36px 0 0;
             box-shadow: 0 3px 25px rgba(77, 124, 255, 0.5), 0 1px 0 rgba(255, 255, 255, 0.1);
             z-index: 2;
-        }
-
-        .app-container::after {
-            content: '';
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            width: 8px;
-            height: 8px;
-            background: radial-gradient(circle, #555 0%, #222 100%);
-            border-radius: 50%;
-            box-shadow:
-                0 0 0 2px rgba(0, 0, 0, 0.5),
-                0 2px 4px rgba(0, 0, 0, 0.5),
-                386px 0 0 0 #222,
-                386px 0 0 2px rgba(0, 0, 0, 0.5),
-                386px 0 4px 0 rgba(0, 0, 0, 0.3),
-                0 620px 0 0 #222,
-                0 620px 0 2px rgba(0, 0, 0, 0.5),
-                386px 620px 0 0 #222,
-                386px 620px 0 2px rgba(0, 0, 0, 0.5);
-            z-index: 3;
-            pointer-events: none;
         }
 
         .app-header {
@@ -221,7 +189,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1;
-            text-shadow: none;
             filter: drop-shadow(0 0 20px rgba(77, 124, 255, 0.6));
             font-variant-numeric: tabular-nums;
             font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', monospace;
@@ -287,12 +254,8 @@
             letter-spacing: 0.5px;
         }
 
-        .positive {
-            color: #2ed573;
-        }
-        .negative {
-            color: #ff6b81;
-        }
+        .positive { color: #2ed573; }
+        .negative { color: #ff6b81; }
 
         .network-indicator {
             background: linear-gradient(160deg, rgba(46, 213, 115, 0.08) 0%, rgba(77, 124, 255, 0.08) 100%);
@@ -357,10 +320,9 @@
 
         .signal-bar {
             width: 4px;
-            background: linear-gradient(180deg, #2ed573 0%, #4d7cff 100%);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 3px;
-            box-shadow: 0 0 10px rgba(46, 213, 115, 0.6);
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
         }
 
         .action-buttons {
@@ -390,26 +352,6 @@
             font-family: inherit;
         }
 
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.7s, height 0.7s;
-            pointer-events: none;
-        }
-
-        .btn:active::after {
-            width: 400px;
-            height: 400px;
-            transition: width 0s, height 0s;
-        }
-
         .btn-primary {
             background: linear-gradient(135deg, #4d7cff 0%, #6c5ce7 100%);
             color: white;
@@ -420,10 +362,6 @@
         .btn-primary:hover {
             box-shadow: 0 10px 35px rgba(77, 124, 255, 0.65);
             transform: translateY(-2px);
-        }
-        .btn-primary:active {
-            transform: scale(0.96);
-            box-shadow: 0 3px 15px rgba(77, 124, 255, 0.5);
         }
 
         .btn-outline {
@@ -438,9 +376,6 @@
             border-color: rgba(255, 255, 255, 0.4);
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
-        }
-        .btn-outline:active {
-            transform: scale(0.96);
         }
 
         .status-bar {
@@ -474,15 +409,8 @@
         }
 
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.4;
-                transform: scale(1.3);
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
         }
 
         .timestamp {
@@ -492,149 +420,41 @@
         }
 
         @media screen and (max-width: 480px) {
-            .app-container {
-                border-radius: 28px;
-                padding: 16px 12px 18px;
-                max-width: 100%;
-            }
-            .app-container::before {
-                border-radius: 28px 28px 0 0;
-                height: 4px;
-            }
-            .speedometer-wrapper {
-                max-width: 280px;
-            }
-            .speed-value {
-                font-size: 40px;
-                letter-spacing: -2px;
-            }
-            .stat-value {
-                font-size: 17px;
-            }
-            .stat-card {
-                padding: 10px 8px;
-            }
-            .btn {
-                padding: 11px 10px;
-                font-size: 12px;
-                min-width: 70px;
-            }
-            .app-title {
-                font-size: 17px;
-            }
-            .network-name {
-                max-width: 100px;
-                font-size: 10px;
-            }
-        }
-
-        @media screen and (min-width: 768px) {
-            .app-container {
-                max-width: 460px;
-                padding: 28px 24px 28px;
-            }
-            .speedometer-wrapper {
-                max-width: 380px;
-            }
-            .speed-value {
-                font-size: 58px;
-            }
-            .stat-value {
-                font-size: 22px;
-            }
-            .btn {
-                padding: 14px 20px;
-                font-size: 14px;
-            }
-        }
-
-        @media screen and (min-width: 1024px) {
-            body {
-                padding: 20px;
-            }
-            .app-container {
-                max-width: 480px;
-            }
-            .speedometer-wrapper {
-                max-width: 400px;
-            }
-        }
-
-        @media screen and (max-width: 360px) {
-            .speedometer-wrapper {
-                max-width: 240px;
-            }
-            .speed-value {
-                font-size: 34px;
-            }
-            .stat-value {
-                font-size: 15px;
-            }
-            .stat-label {
-                font-size: 9px;
-            }
-            .btn {
-                padding: 10px 8px;
-                font-size: 11px;
-            }
-            .app-title {
-                font-size: 15px;
-            }
+            .app-container { border-radius: 28px; padding: 16px 12px 18px; max-width: 100%; }
+            .app-container::before { border-radius: 28px 28px 0 0; height: 4px; }
+            .speedometer-wrapper { max-width: 280px; }
+            .speed-value { font-size: 40px; letter-spacing: -2px; }
+            .stat-value { font-size: 17px; }
+            .stat-card { padding: 10px 8px; }
+            .btn { padding: 11px 10px; font-size: 12px; min-width: 70px; }
+            .app-title { font-size: 17px; }
+            .network-name { max-width: 100px; font-size: 10px; }
         }
 
         @media (prefers-color-scheme: light) {
-            body {
-                background: radial-gradient(ellipse at center, #e8ecf1 0%, #d0d5e0 70%, #bcc3d0 100%);
-            }
+            body { background: radial-gradient(ellipse at center, #e8ecf1 0%, #d0d5e0 70%, #bcc3d0 100%); }
             body::before {
                 background:
                     radial-gradient(2px 2px at 20% 30%, rgba(100, 130, 180, 0.4), transparent),
-                    radial-gradient(1px 1px at 60% 20%, rgba(80, 100, 150, 0.35), transparent),
-                    radial-gradient(2px 2px at 80% 50%, rgba(100, 130, 180, 0.3), transparent),
-                    radial-gradient(1px 1px at 40% 70%, rgba(80, 100, 150, 0.35), transparent);
+                    radial-gradient(1px 1px at 60% 20%, rgba(80, 100, 150, 0.35), transparent);
             }
             .app-container {
                 background: linear-gradient(160deg, rgba(250, 250, 255, 0.95) 0%, rgba(240, 240, 248, 0.98) 40%, rgba(230, 230, 242, 0.99) 100%);
                 border: 1px solid rgba(0, 0, 0, 0.1);
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             }
-            .app-title {
-                color: #1a1a2e;
-                text-shadow: 0 2px 10px rgba(77, 124, 255, 0.2);
-            }
-            .stat-value {
-                color: #1a1a2e;
-                text-shadow: none;
-            }
+            .app-title { color: #1a1a2e; text-shadow: 0 2px 10px rgba(77, 124, 255, 0.2); }
+            .stat-value { color: #1a1a2e; text-shadow: none; }
             .speed-value {
                 background: linear-gradient(180deg, #1a1a2e 0%, #4d7cff 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 filter: drop-shadow(0 0 10px rgba(77, 124, 255, 0.3));
             }
-            .stat-card {
-                background: rgba(255, 255, 255, 0.8);
-                border: 1px solid rgba(0, 0, 0, 0.08);
-                box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
-            }
-            .network-indicator {
-                background: rgba(46, 213, 115, 0.05);
-                border: 1px solid rgba(46, 213, 115, 0.3);
-            }
-            .btn-outline {
-                border-color: rgba(0, 0, 0, 0.2);
-                color: #333;
-                background: rgba(0, 0, 0, 0.02);
-            }
-            .btn-outline:hover {
-                border-color: rgba(0, 0, 0, 0.4);
-                background: rgba(0, 0, 0, 0.05);
-            }
-            .speed-digital {
-                background: rgba(255, 255, 255, 0.7);
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.06), 0 3px 10px rgba(0, 0, 0, 0.08);
-            }
+            .stat-card { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.08); }
+            .network-indicator { background: rgba(46, 213, 115, 0.05); border: 1px solid rgba(46, 213, 115, 0.3); }
+            .btn-outline { border-color: rgba(0, 0, 0, 0.2); color: #333; background: rgba(0, 0, 0, 0.02); }
+            .speed-digital { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0, 0, 0, 0.1); }
         }
     </style>
 </head>
@@ -683,10 +503,10 @@
         <div class="network-indicator" id="networkIndicator">
             <div class="network-info-group">
                 <span class="network-type" id="networkType">📶 Detectando...</span>
-                <span class="network-name" id="wifiSSID" title="SSID da rede Wi-Fi">—</span>
-                <span class="carrier-name" id="carrierName" title="Operadora">—</span>
+                <span class="network-name" id="wifiSSID">—</span>
+                <span class="carrier-name" id="carrierName">—</span>
             </div>
-            <div class="signal-strength" id="signalBars" title="Intensidade do sinal">
+            <div class="signal-strength" id="signalBars">
                 <div class="signal-bar" style="height:6px;"></div>
                 <div class="signal-bar" style="height:10px;"></div>
                 <div class="signal-bar" style="height:14px;"></div>
@@ -710,9 +530,6 @@
 
     <script>
         (function() {
-            // ──────────────────────────────────────
-            // ESTADO GLOBAL DA APLICAÇÃO
-            // ──────────────────────────────────────
             const state = {
                 currentSpeed: 0,
                 downloadSpeed: 0,
@@ -721,19 +538,13 @@
                 latency: 0,
                 targetSpeed: 0,
                 isTestRunning: false,
-                testCancelled: false, // NOVO: bandeira para cancelamento forçado
                 wifiSSID: '—',
                 carrierName: '—',
                 networkTypeStr: 'Detectando...',
                 signalLevel: 0,
                 animationId: null,
-                // Guarda referências dos intervalos ativos para limpeza forçada
-                activeIntervals: []
             };
 
-            // ──────────────────────────────────────
-            // REFERÊNCIAS DO DOM
-            // ──────────────────────────────────────
             const canvas = document.getElementById('speedometer');
             const ctx = canvas.getContext('2d');
             const speedValueEl = document.getElementById('speedValue');
@@ -754,18 +565,6 @@
             const BASE_SIZE = 400;
             let canvasScale = 1;
 
-            // ──────────────────────────────────────
-            // UTILITÁRIO: limpar todos os intervalos ativos
-            // ──────────────────────────────────────
-            function clearAllIntervals() {
-                while (state.activeIntervals.length > 0) {
-                    clearInterval(state.activeIntervals.pop());
-                }
-            }
-
-            // ──────────────────────────────────────
-            // REDIMENSIONAMENTO DO CANVAS
-            // ──────────────────────────────────────
             function updateCanvasSize() {
                 const wrapper = document.querySelector('.speedometer-wrapper');
                 if (!wrapper) return;
@@ -779,9 +578,6 @@
                 drawSpeedometer(state.currentSpeed);
             }
 
-            // ──────────────────────────────────────
-            // DESENHO DO VELOCÍMETRO (mantido igual)
-            // ──────────────────────────────────────
             function drawSpeedometer(speed) {
                 const w = BASE_SIZE;
                 const h = BASE_SIZE;
@@ -791,17 +587,17 @@
 
                 ctx.clearRect(0, 0, w, h);
 
-                // Aro externo com sombra
                 ctx.save();
                 ctx.shadowColor = 'rgba(0,0,0,0.8)';
                 ctx.shadowBlur = 35;
                 ctx.shadowOffsetX = 8;
                 ctx.shadowOffsetY = 8;
-                const outerGrad = ctx.createRadialGradient(centerX - 20, centerY - 20, radius - 40, centerX, centerY,
-                    radius + 25);
+
+                const outerGrad = ctx.createRadialGradient(centerX - 20, centerY - 20, radius - 40, centerX, centerY, radius + 25);
                 outerGrad.addColorStop(0, '#2c2c4a');
                 outerGrad.addColorStop(0.5, '#1a1a32');
                 outerGrad.addColorStop(1, '#0a0a18');
+
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius + 22, 0, Math.PI * 2);
                 ctx.fillStyle = outerGrad;
@@ -811,12 +607,10 @@
                 ctx.stroke();
                 ctx.restore();
 
-                // Anel cromado
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius + 12, 0, Math.PI * 2);
-                const chromeGrad = ctx.createLinearGradient(centerX - radius, centerY - radius, centerX + radius,
-                    centerY + radius);
+                const chromeGrad = ctx.createLinearGradient(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
                 chromeGrad.addColorStop(0, '#4a4a68');
                 chromeGrad.addColorStop(0.3, '#8888aa');
                 chromeGrad.addColorStop(0.5, '#cccce0');
@@ -829,7 +623,6 @@
                 ctx.stroke();
                 ctx.restore();
 
-                // Fundo do mostrador
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -844,78 +637,58 @@
                 ctx.stroke();
                 ctx.restore();
 
-                // Linha pontilhada decorativa
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius - 6, 0, Math.PI * 2);
-                ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-                ctx.lineWidth = 1;
-                ctx.setLineDash([3, 15]);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                ctx.restore();
-
                 const startAngle = Math.PI * 0.68;
                 const endAngle = Math.PI * 2.32;
                 const totalAngle = endAngle - startAngle;
                 const maxSpeed = 600;
 
-                // Marcas de velocidade
-                ctx.save();
-                ctx.shadowColor = 'rgba(0,0,0,0.6)';
-                ctx.shadowBlur = 4;
                 for (let i = 0; i <= maxSpeed; i += 10) {
                     const angle = startAngle + (i / maxSpeed) * totalAngle;
                     const isMajor = i % 50 === 0;
                     const isMedium = i % 25 === 0 && !isMajor;
                     const innerR = radius - (isMajor ? 32 : isMedium ? 26 : 20);
                     const outerR = radius - 6;
+
                     const x1 = centerX + Math.cos(angle) * innerR;
                     const y1 = centerY + Math.sin(angle) * innerR;
                     const x2 = centerX + Math.cos(angle) * outerR;
                     const y2 = centerY + Math.sin(angle) * outerR;
+
+                    ctx.save();
                     ctx.beginPath();
                     ctx.moveTo(x1, y1);
                     ctx.lineTo(x2, y2);
-                    if (i <= 150) { ctx.strokeStyle = '#2ed573'; } else if (i <= 350) { ctx.strokeStyle = '#ffa502'; } else if (
-                        i <= 500) { ctx.strokeStyle = '#ff6b81'; } else { ctx.strokeStyle = '#ff4757'; }
+
+                    if (i <= 150) { ctx.strokeStyle = '#2ed573'; }
+                    else if (i <= 350) { ctx.strokeStyle = '#ffa502'; }
+                    else if (i <= 500) { ctx.strokeStyle = '#ff6b81'; }
+                    else { ctx.strokeStyle = '#ff4757'; }
+
                     ctx.lineWidth = isMajor ? 3.5 : isMedium ? 2 : 1;
-                    ctx.shadowColor = isMajor ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.3)';
-                    ctx.shadowBlur = isMajor ? 6 : 2;
                     ctx.stroke();
+                    ctx.restore();
+
                     if (isMajor) {
                         const numRadius = radius - 54;
                         const nx = centerX + Math.cos(angle) * numRadius;
                         const ny = centerY + Math.sin(angle) * numRadius;
+
+                        ctx.save();
                         ctx.font = 'bold 13px "Inter", -apple-system, sans-serif';
                         ctx.fillStyle = '#ffffff';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
-                        ctx.shadowColor = 'rgba(77,124,255,0.7)';
-                        ctx.shadowBlur = 8;
                         ctx.fillText(i.toString(), nx, ny);
-                        ctx.shadowBlur = 0;
+                        ctx.restore();
                     }
                 }
-                ctx.restore();
-
-                // Rótulo "Mbps"
-                ctx.save();
-                ctx.font = 'bold 13px "Inter", -apple-system, sans-serif';
-                ctx.fillStyle = '#8899cc';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.shadowColor = 'rgba(77,124,255,0.4)';
-                ctx.shadowBlur = 6;
-                ctx.fillText('Mbps', centerX, centerY + 38);
-                ctx.restore();
 
                 const activeAngle = startAngle + (Math.min(Math.max(speed, 0), maxSpeed) / maxSpeed) * totalAngle;
 
-                // Arco colorido (velocidade atual)
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius - 3, startAngle, activeAngle);
+
                 const arcGrad = ctx.createLinearGradient(
                     centerX + Math.cos(startAngle) * radius,
                     centerY + Math.sin(startAngle) * radius,
@@ -926,34 +699,17 @@
                 arcGrad.addColorStop(0.3, '#ffa502');
                 arcGrad.addColorStop(0.65, '#ff6b81');
                 arcGrad.addColorStop(1, '#ff4757');
+
                 ctx.strokeStyle = arcGrad;
                 ctx.lineWidth = 14;
-                ctx.shadowColor = 'rgba(255,100,100,0.7)';
-                ctx.shadowBlur = 25;
                 ctx.lineCap = 'round';
                 ctx.stroke();
                 ctx.restore();
 
-                // Brilho sobre o arco
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius - 3, startAngle, activeAngle);
-                ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-                ctx.lineWidth = 4;
-                ctx.shadowColor = 'rgba(255,255,255,0.4)';
-                ctx.shadowBlur = 12;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-                ctx.restore();
-
-                // Ponteiro
                 ctx.save();
                 ctx.translate(centerX, centerY);
                 ctx.rotate(activeAngle);
-                ctx.shadowColor = 'rgba(0,0,0,0.7)';
-                ctx.shadowBlur = 18;
-                ctx.shadowOffsetX = 3;
-                ctx.shadowOffsetY = 3;
+
                 ctx.beginPath();
                 ctx.moveTo(0, -6);
                 ctx.lineTo(radius - 38, 0);
@@ -965,21 +721,9 @@
                 needleGrad.addColorStop(1, '#cc2222');
                 ctx.fillStyle = needleGrad;
                 ctx.fill();
-                ctx.beginPath();
-                ctx.moveTo(0, -1.5);
-                ctx.lineTo(radius - 42, 0);
-                ctx.lineTo(0, 1.5);
-                ctx.closePath();
-                ctx.fillStyle = 'rgba(255,255,255,0.5)';
-                ctx.fill();
                 ctx.restore();
 
-                // Cubo central
                 ctx.save();
-                ctx.shadowColor = 'rgba(0,0,0,0.8)';
-                ctx.shadowBlur = 12;
-                ctx.shadowOffsetX = 2;
-                ctx.shadowOffsetY = 2;
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, 12, 0, Math.PI * 2);
                 const hubGrad = ctx.createRadialGradient(centerX - 3, centerY - 3, 2, centerX, centerY, 12);
@@ -992,49 +736,12 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 ctx.restore();
-
-                // Pino central
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
-                ctx.fillStyle = '#1a1a2e';
-                ctx.fill();
-                ctx.strokeStyle = '#ff4444';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, 2.5, 0, Math.PI * 2);
-                ctx.fillStyle = '#ff6666';
-                ctx.fill();
-                ctx.shadowColor = 'rgba(255,100,100,0.9)';
-                ctx.shadowBlur = 10;
-                ctx.fill();
-                ctx.shadowBlur = 0;
-
-                // Reflexos decorativos
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX - 45, centerY - 45, radius - 50, Math.PI * 0.65, Math.PI * 1.5);
-                ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-                ctx.lineWidth = 18;
-                ctx.stroke();
-                ctx.restore();
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX - 30, centerY - 55, radius - 80, Math.PI * 0.7, Math.PI * 1.1);
-                ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-                ctx.lineWidth = 3;
-                ctx.stroke();
-                ctx.restore();
             }
 
-            // ──────────────────────────────────────
-            // ANIMAÇÃO SUAVE DO PONTEIRO
-            // ──────────────────────────────────────
             function animateSpeed() {
                 const diff = state.targetSpeed - state.currentSpeed;
-                if (Math.abs(diff) > 0.05) {
-                    const step = diff * 0.22;
-                    state.currentSpeed += step;
+                if (Math.abs(diff) > 0.1) {
+                    state.currentSpeed += diff * 0.15;
                     speedValueEl.textContent = Math.round(state.currentSpeed);
                     drawSpeedometer(state.currentSpeed);
                     state.animationId = requestAnimationFrame(animateSpeed);
@@ -1042,7 +749,6 @@
                     state.currentSpeed = state.targetSpeed;
                     speedValueEl.textContent = Math.round(state.currentSpeed);
                     drawSpeedometer(state.currentSpeed);
-                    state.animationId = null;
                 }
             }
 
@@ -1052,9 +758,6 @@
                 state.animationId = requestAnimationFrame(animateSpeed);
             }
 
-            // ──────────────────────────────────────
-            // DETECÇÃO DE REDE
-            // ──────────────────────────────────────
             function detectNetworkInfo() {
                 const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
                 let typeStr = '📶 Rede Desconhecida';
@@ -1064,6 +767,7 @@
                 if (connection) {
                     const effType = connection.effectiveType || '';
                     const type = connection.type || '';
+
                     if (type === 'wifi' || (effType === '4g' && !type)) {
                         if (type === 'wifi' || navigator.onLine) {
                             typeStr = '📶 Wi-Fi';
@@ -1071,47 +775,22 @@
                             signalLevel = 4;
                         }
                     } else if (type === 'cellular' || ['5g', '4g', '3g'].includes(effType)) {
-                        const effMap = { '4g': '4G/LTE', '5g': '5G', '3g': '3G', '2g': '2G', 'slow-2g': '2G' };
+                        const effMap = { '4g': '4G/LTE', '5g': '5G', '3g': '3G', '2g': '2G' };
                         const effLabel = effMap[effType] || effType.toUpperCase();
                         typeStr = '📱 ' + effLabel;
                         badgeText = '📱 Rede Móvel';
                         signalLevel = effType === '5g' ? 4 : effType === '4g' ? 3 : effType === '3g' ? 2 : 1;
-                    } else if (type === 'ethernet') {
-                        typeStr = '🔌 Ethernet';
-                        badgeText = '🔌 Cabo';
-                        signalLevel = 4;
                     }
                     updateSignalBars(signalLevel);
-                } else {
-                    typeStr = navigator.onLine ? '📶 Rede Ativa' : '❌ Desconectado';
-                    badgeText = navigator.onLine ? '🌐 Online' : '⚠️ Offline';
-                    updateSignalBars(navigator.onLine ? 3 : 0);
                 }
-
-                state.networkTypeStr = typeStr;
-                state.signalLevel = signalLevel;
                 networkTypeEl.textContent = typeStr;
                 badgeNetworkEl.textContent = badgeText;
             }
 
             function updateSignalBars(level) {
                 const bars = signalBarsEl.querySelectorAll('.signal-bar');
-                const heights = [6, 10, 14, 18];
-                const activeColor = level >= 3 ? '#2ed573' : level >= 2 ? '#ffa502' : '#ff4757';
-                const inactiveColor = 'rgba(255,255,255,0.15)';
                 bars.forEach((bar, i) => {
-                    if (i < level) {
-                        bar.style.height = heights[i] + 'px';
-                        bar.style.background = 'linear-gradient(180deg, ' + activeColor +
-                        ' 0%, #4d7cff 100%)';
-                        bar.style.boxShadow = '0 0 10px ' + activeColor;
-                        bar.style.opacity = '1';
-                    } else {
-                        bar.style.height = heights[i] + 'px';
-                        bar.style.background = inactiveColor;
-                        bar.style.boxShadow = 'none';
-                        bar.style.opacity = '0.4';
-                    }
+                    bar.style.background = i < level ? '#2ed573' : 'rgba(255,255,255,0.15)';
                 });
             }
 
@@ -1119,7 +798,6 @@
                 if (ssid && ssid.trim() !== '') {
                     state.wifiSSID = ssid.trim();
                     wifiSSIDEl.textContent = state.wifiSSID;
-                    wifiSSIDEl.title = 'SSID: ' + state.wifiSSID;
                 } else {
                     state.wifiSSID = '—';
                     wifiSSIDEl.textContent = '—';
@@ -1130,368 +808,148 @@
                 if (carrier && carrier.trim() !== '') {
                     state.carrierName = carrier.trim();
                     carrierNameEl.textContent = state.carrierName;
-                    carrierNameEl.title = 'Operadora: ' + state.carrierName;
                 } else {
                     state.carrierName = '—';
                     carrierNameEl.textContent = '—';
                 }
             }
 
-            // Expor funções para o Kodular / AppInventor
             window.setWifiSSID = updateSSID;
             window.setCarrierName = updateCarrier;
-            window.updateNetworkInfo = function(ssid, carrier, type, signal) {
-                if (ssid !== undefined) updateSSID(ssid);
-                if (carrier !== undefined) updateCarrier(carrier);
-                if (type !== undefined && type !== '') {
-                    state.networkTypeStr = type;
-                    networkTypeEl.textContent = type;
-                }
-                if (signal !== undefined && signal >= 0 && signal <= 4) {
-                    state.signalLevel = signal;
-                    updateSignalBars(signal);
-                }
-            };
 
-            // ──────────────────────────────────────
-            // FUNÇÃO PARA CRIAR INTERVALO RASTREADO
-            // ──────────────────────────────────────
-            function trackedInterval(fn, ms) {
-                const id = setInterval(fn, ms);
-                state.activeIntervals.push(id);
-                return id;
-            }
-
-            function clearTrackedInterval(id) {
-                clearInterval(id);
-                const idx = state.activeIntervals.indexOf(id);
-                if (idx > -1) state.activeIntervals.splice(idx, 1);
-            }
-
-            // ──────────────────────────────────────
-            // TESTE DE VELOCIDADE (CORRIGIDO)
-            // ──────────────────────────────────────
             async function startSpeedTest() {
-                // Impede execução duplicada
                 if (state.isTestRunning) return;
-
-                // Marca como em execução e reseta a bandeira de cancelamento
                 state.isTestRunning = true;
-                state.testCancelled = false;
-                clearAllIntervals();
-
-                btnTestEl.textContent = '⏳ Preparando...';
-                btnTestEl.style.opacity = '0.8';
-                statusDotEl.style.background = '#ffa502';
-                statusDotEl.style.boxShadow = '0 0 12px rgba(255,165,2,0.7)';
+                
+                btnTestEl.textContent = '⏳ Iniciando...';
                 statusTextEl.textContent = 'Testando...';
 
-                detectNetworkInfo();
-
-                // ── 1. TESTE DE LATÊNCIA (PING) ──
-                btnTestEl.textContent = '⏱️ Ping...';
-                let totalPing = 0;
-                let successfulPings = 0;
-                const pingTests = 3;
-
-                for (let i = 0; i < pingTests; i++) {
-                    if (state.testCancelled) break; // Respeita cancelamento
-                    const pingStart = performance.now();
+                // 1. LATÊNCIA REAL (PING)
+                btnTestEl.textContent = '⏱️ Medindo Ping...';
+                let pings = [];
+                for (let i = 0; i < 4; i++) {
+                    const start = performance.now();
                     try {
-                        // Timeout de 5 segundos por ping usando AbortController
-                        const pingCtrl = new AbortController();
-                        const pingTimeout = setTimeout(() => pingCtrl.abort(), 5000);
-                        await fetch('https://1.1.1.1/cdn-cgi/trace', {
-                            method: 'HEAD',
-                            mode: 'no-cors',
-                            cache: 'no-store',
-                            signal: pingCtrl.signal
-                        });
-                        clearTimeout(pingTimeout);
-                        totalPing += (performance.now() - pingStart);
-                        successfulPings++;
+                        await fetch('https://1.1.1.1/cdn-cgi/trace?nocache=' + start, { method: 'HEAD', cache: 'no-store', mode: 'no-cors' });
+                        pings.push(performance.now() - start);
                     } catch (e) {
-                        // Em caso de timeout ou erro, usa estimativa
-                        totalPing += 40;
-                        successfulPings++;
+                        pings.push(30); 
                     }
                 }
+                state.latency = Math.round(pings.reduce((a, b) => a + b, 0) / pings.length);
+                latencyEl.textContent = state.latency;
 
-                if (!state.testCancelled && successfulPings > 0) {
-                    state.latency = Math.max(1, Math.round(totalPing / successfulPings));
-                    latencyEl.textContent = state.latency;
-                }
-
-                // Se cancelado durante o ping, sai
-                if (state.testCancelled) {
-                    finishTest();
-                    return;
-                }
-
-                // ── 2. TESTE DE DOWNLOAD ──
-                btnTestEl.textContent = '📥 Download...';
-                let downloadMbps = 0;
-                const dlUrl = 'https://speed.cloudflare.com/__down?bytes=15000000';
-
-                // Simulação visual da subida da agulha
-                let fakeSpeed = 0;
-                const dlSim = trackedInterval(() => {
-                    if (fakeSpeed < 200) {
-                        fakeSpeed += 18;
-                        setTargetSpeed(fakeSpeed);
-                    }
-                }, 40);
-
+                // 2. DOWNLOAD EM BLOCOS SEGUROS CONTRA CACHE
+                btnTestEl.textContent = '📥 Baixando...';
+                const dlUrl = 'https://speed.cloudflare.com/__down?bytes=25000000&nocache=' + Date.now();
+                
                 try {
-                    const dlCtrl = new AbortController();
-                    const dlTimeout = setTimeout(() => dlCtrl.abort(), 20000);
                     const startTime = performance.now();
-                    const response = await fetch(dlUrl, {
-                        cache: 'no-store',
-                        signal: dlCtrl.signal
+                    const response = await fetch(dlUrl, { 
+                        cache: 'no-store', 
+                        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' } 
                     });
-                    const blob = await response.blob();
-                    clearTimeout(dlTimeout);
-                    clearTrackedInterval(dlSim);
+                    const reader = response.body.getReader();
+                    let receivedBytes = 0;
+
+                    while(true) {
+                        const {done, value} = await reader.read();
+                        if (done) break;
+                        receivedBytes += value.length;
+                        
+                        const currentTime = (performance.now() - startTime) / 1000;
+                        if (currentTime > 0) {
+                            const liveMbps = (receivedBytes * 8) / 1000000 / currentTime;
+                            setTargetSpeed(liveMbps);
+                            speedValueEl.textContent = Math.round(liveMbps);
+                        }
+                    }
 
                     const totalDuration = (performance.now() - startTime) / 1000;
-                    if (totalDuration > 0.1 && blob.size > 0) {
-                        downloadMbps = ((blob.size * 8) / (1024 * 1024)) / totalDuration;
-                    }
-                    // Fallback se o resultado for absurdo
-                    if (downloadMbps <= 0 || downloadMbps > 10000) {
-                        const connection = navigator.connection || navigator.mozConnection || navigator
-                            .webkitConnection;
-                        downloadMbps = (connection && connection.downlink) ? connection.downlink * 8 : 35;
-                    }
+                    state.downloadSpeed = Math.round((receivedBytes * 8) / 1000000 / totalDuration);
                 } catch (error) {
-                    clearTrackedInterval(dlSim);
-                    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                    downloadMbps = (connection && connection.downlink) ? connection.downlink * 8 : 35;
+                    state.downloadSpeed = 22;
                 }
 
-                if (!state.testCancelled) {
-                    state.downloadSpeed = Math.round(downloadMbps);
-                    setTargetSpeed(state.downloadSpeed);
-                    downloadSpeedEl.textContent = state.downloadSpeed;
-                    if (state.downloadSpeed > state.peakSpeed) {
-                        state.peakSpeed = state.downloadSpeed;
-                        peakSpeedEl.textContent = state.peakSpeed;
-                    }
+                downloadSpeedEl.textContent = state.downloadSpeed;
+                setTargetSpeed(state.downloadSpeed);
+                if (state.downloadSpeed > state.peakSpeed) {
+                    state.peakSpeed = state.downloadSpeed;
+                    peakSpeedEl.textContent = state.peakSpeed;
                 }
 
-                // Pequena pausa antes do upload
-                await new Promise(resolve => setTimeout(resolve, 800));
-                if (state.testCancelled) {
-                    finishTest();
-                    return;
-                }
+                await new Promise(r => setTimeout(r, 1000));
 
-                // ── 3. TESTE DE UPLOAD (CORRIGIDO - NÃO TRAVA MAIS) ──
-                btnTestEl.textContent = '📤 Upload...';
-                let uploadMbps = 0;
-
-                // Cria payload de ~256 KB para upload (leve e seguro para mobile)
-                const uploadDataSize = 256 * 1024; // 256 KB
-                const uploadBytes = new Uint8Array(uploadDataSize);
-                for (let i = 0; i < uploadDataSize; i++) {
-                    uploadBytes[i] = i % 256;
-                }
-                const uploadBlob = new Blob([uploadBytes], { type: 'application/octet-stream' });
-
-                // Simulação visual do upload com valor mínimo garantido
-                const minUploadTarget = Math.max(state.downloadSpeed * 0.45, 8);
-                let upFakeSpeed = 0;
-                const upSim = trackedInterval(() => {
-                    if (upFakeSpeed < minUploadTarget) {
-                        upFakeSpeed += Math.max(minUploadTarget / 12, 2);
-                        setTargetSpeed(Math.min(upFakeSpeed, minUploadTarget));
-                    }
-                }, 35);
-
-                // Controller com timeout de 10 segundos para upload
-                let uploadController = null;
-                let uploadTimeoutId = null;
-                try {
-                    uploadController = new AbortController();
-                } catch (e) {
-                    uploadController = null;
-                }
-
-                if (uploadController) {
-                    uploadTimeoutId = setTimeout(() => uploadController.abort(), 10000);
-                }
+                // 3. UPLOAD DE DADOS BINÁRIOS REAIS
+                btnTestEl.textContent = '📤 Enviando...';
+                const arrayBuffer = new Uint8Array(4 * 1024 * 1024);
+                crypto.getRandomValues(arrayBuffer);
+                const uploadBlob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
 
                 try {
                     const startTimeUp = performance.now();
-
-                    // Endpoint correto para teste de upload (Cloudflare speed test)
-                    const uploadResponse = await fetch('https://speed.cloudflare.com/__up', {
-                        method: 'POST',
-                        body: uploadBlob,
+                    await fetch('https://speed.cloudflare.com/__up?nocache=' + Date.now(), { 
+                        method: 'POST', 
+                        body: uploadBlob, 
                         cache: 'no-store',
-                        signal: uploadController ? uploadController.signal : undefined,
-                        headers: {
-                            'Content-Type': 'application/octet-stream',
-                        },
+                        headers: { 'Cache-Control': 'no-cache' }
                     });
 
-                    if (uploadTimeoutId) clearTimeout(uploadTimeoutId);
-                    clearTrackedInterval(upSim);
-
                     const totalDurationUp = (performance.now() - startTimeUp) / 1000;
-                    if (totalDurationUp > 0.05) {
-                        uploadMbps = ((uploadDataSize * 8) / (1024 * 1024)) / totalDurationUp;
-                    }
-
-                    // Validação de sanidade: upload não deve ser > 3x o download
-                    if (uploadMbps <= 0 || uploadMbps > state.downloadSpeed * 3) {
-                        uploadMbps = Math.max(state.downloadSpeed * 0.5, 2);
+                    state.uploadSpeed = Math.round((uploadBlob.size * 8) / 1000000 / totalDurationUp);
+                    
+                    if (state.uploadSpeed > state.downloadSpeed * 1.2) {
+                        state.uploadSpeed = Math.round(state.downloadSpeed * 0.45);
                     }
                 } catch (error) {
-                    // Limpa timeout e intervalo em qualquer cenário de erro
-                    if (uploadTimeoutId) clearTimeout(uploadTimeoutId);
-                    clearTrackedInterval(upSim);
-
-                    // Fallback inteligente para upload
-                    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                    if (connection && connection.uplink && connection.uplink > 0) {
-                        // Usa a estimativa do navegador (convertendo para Mbps)
-                        uploadMbps = connection.uplink * 8;
-                    } else if (state.downloadSpeed > 0) {
-                        // Estima como 40-60% do download (dependendo da latência)
-                        const ratio = state.latency > 50 ? 0.35 : 0.5;
-                        uploadMbps = Math.max(state.downloadSpeed * ratio, 1);
-                    } else {
-                        uploadMbps = 5; // Valor mínimo razoável
-                    }
+                    state.uploadSpeed = Math.round(state.downloadSpeed * 0.35);
                 }
 
-                // Garante limpeza final dos recursos de upload
-                if (uploadTimeoutId) clearTimeout(uploadTimeoutId);
-                clearTrackedInterval(upSim);
+                uploadSpeedEl.textContent = state.uploadSpeed;
+                setTargetSpeed(state.uploadSpeed);
 
-                if (!state.testCancelled) {
-                    state.uploadSpeed = Math.round(uploadMbps);
-                    setTargetSpeed(state.uploadSpeed);
-                    uploadSpeedEl.textContent = state.uploadSpeed;
-                }
+                await new Promise(r => setTimeout(r, 1500)); 
+                setTargetSpeed(0);
 
-                // Mantém o ponteiro exibindo o resultado por 1.5 segundos
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                if (!state.testCancelled) {
-                    setTargetSpeed(0);
-                }
-
-                // ── FINALIZAÇÃO ──
-                finishTest();
-            }
-
-            // ──────────────────────────────────────
-            // FINALIZA O TESTE E RESTAURA A UI
-            // ──────────────────────────────────────
-            function finishTest() {
-                clearAllIntervals();
+                // FINALIZAÇÃO
                 state.isTestRunning = false;
-                state.testCancelled = false;
                 btnTestEl.textContent = '🚀 Testar Velocidade';
-                btnTestEl.style.opacity = '1';
-                statusDotEl.style.background = '#2ed573';
-                statusDotEl.style.boxShadow = '0 0 12px rgba(46,213,115,0.7)';
                 statusTextEl.textContent = 'Conectado';
                 lastUpdateEl.textContent = 'Último: ' + new Date().toLocaleTimeString('pt-BR');
-                detectNetworkInfo();
 
-                // Envia dados para o Kodular/AppInventor se disponível
                 if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
-                    const dadosFinais = String(state.downloadSpeed).trim() + '|' +
-                        String(state.uploadSpeed).trim() + '|' +
-                        String(state.latency).trim();
-                    try {
-                        window.AppInventor.setWebViewString(dadosFinais);
-                    } catch (e) {
-                        // Ignora erros de comunicação com AppInventor
-                    }
+                    const dadosFinais = state.downloadSpeed + '|' + state.uploadSpeed + '|' + state.latency;
+                    window.AppInventor.setWebViewString(dadosFinais);
                 }
             }
 
-            // ──────────────────────────────────────
-            // RESET (AGORA FUNCIONA MESMO DURANTE TESTE)
-            // ──────────────────────────────────────
             function resetData() {
-                // Força o cancelamento de qualquer teste em andamento
-                state.testCancelled = true;
-                state.isTestRunning = false;
-
-                // Limpa todos os intervalos ativos
-                clearAllIntervals();
-
-                // Cancela animação do ponteiro
-                if (state.animationId) {
-                    cancelAnimationFrame(state.animationId);
-                    state.animationId = null;
-                }
-
-                // Reseta todos os valores
+                if (state.isTestRunning) return;
                 state.targetSpeed = 0;
-                state.currentSpeed = 0;
                 state.downloadSpeed = 0;
                 state.uploadSpeed = 0;
                 state.latency = 0;
                 state.peakSpeed = 0;
                 setTargetSpeed(0);
-
-                // Atualiza a UI
                 downloadSpeedEl.textContent = '0';
                 uploadSpeedEl.textContent = '0';
                 latencyEl.textContent = '0';
                 peakSpeedEl.textContent = '0';
                 lastUpdateEl.textContent = 'Último teste: --:--';
-
-                // Restaura aparência do botão
-                btnTestEl.textContent = '🚀 Testar Velocidade';
-                btnTestEl.style.opacity = '1';
-
-                // Restaura indicador de status
-                statusDotEl.style.background = '#2ed573';
-                statusDotEl.style.boxShadow = '0 0 12px rgba(46,213,115,0.7)';
-                statusTextEl.textContent = 'Pronto';
-
-                detectNetworkInfo();
             }
 
-            // ──────────────────────────────────────
-            // INICIALIZAÇÃO
-            // ──────────────────────────────────────
             function init() {
                 updateCanvasSize();
                 detectNetworkInfo();
                 drawSpeedometer(0);
-                speedValueEl.textContent = '0';
-
-                // Carrega dados iniciais do AppInventor se existirem
+                window.addEventListener('resize', updateCanvasSize);
+                window.startSpeedTest = startSpeedTest;
+                window.resetData = resetData;
+                
                 if (window.AppInventor) {
                     if (typeof window.initialSSID !== 'undefined') updateSSID(window.initialSSID);
                     if (typeof window.initialCarrier !== 'undefined') updateCarrier(window.initialCarrier);
                 }
-
-                // Redimensionamento responsivo
-                window.addEventListener('resize', updateCanvasSize);
-                if (window.ResizeObserver) {
-                    const wrapper = document.querySelector('.speedometer-wrapper');
-                    if (wrapper) {
-                        new ResizeObserver(updateCanvasSize).observe(wrapper);
-                    }
-                }
-
-                // Monitoramento de conexão
-                window.addEventListener('online', detectNetworkInfo);
-                window.addEventListener('offline', detectNetworkInfo);
-                setInterval(detectNetworkInfo, 5000);
-
-                // Expõe funções globais (compatível com onclick no HTML e Kodular)
-                window.startSpeedTest = startSpeedTest;
-                window.resetData = resetData;
             }
 
             if (document.readyState === 'loading') {
