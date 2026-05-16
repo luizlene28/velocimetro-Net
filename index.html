@@ -399,7 +399,7 @@
             document.getElementById('btnTest').textContent = '⏳ Analisando...';
 
             let progress = 0;
-            let testCompleted = false; // Trava de segurança para enviar apenas 1 vez
+            let testCompleted = false; 
 
             const testInterval = setInterval(() => {
                 if (testCompleted) return;
@@ -409,7 +409,7 @@
                 animateSpeed();
 
                 if (progress >= 800) {
-                    testCompleted = true; // Trava o código aqui
+                    testCompleted = true; 
                     clearInterval(testInterval);
                     
                     const finalD = Math.round(550 + Math.random() * 200);
@@ -431,9 +431,9 @@
                     
                     document.getElementById('lastUpdate').textContent = 'Último: ' + new Date().toLocaleTimeString();
 
-                    // --- ENVIO TOTALMENTE LIMPO, TRATADO E ESTÁVEL PARA O KODULAR ---
-                    const dadosFinais = String(finalD) + "|" + String(finalU) + "|" + String(finalP);
+                    // --- ENVIO TOTALMENTE TRATADO, SEGURO E EM STRING PURA PARA EVITAR ERROS NO KODULAR ---
                     if (window.AppInventor) {
+                        var dadosFinais = String(finalD).trim() + "|" + String(finalU).trim() + "|" + String(finalP).trim();
                         window.AppInventor.setWebViewString(dadosFinais);
                     }
                 }
