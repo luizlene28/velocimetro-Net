@@ -528,440 +528,440 @@
         </div>
     </div>
 
-   <script>
-    (function() {
-        const state = {
-            currentSpeed: 0,
-            downloadSpeed: 0,
-            uploadSpeed: 0,
-            peakSpeed: 0,
-            latency: 0,
-            targetSpeed: 0,
-            isTestRunning: false,
-            wifiSSID: '—',
-            carrierName: '—',
-            networkTypeStr: 'Detectando...',
-            signalLevel: 0,
-            animationId: null,
-        };
+    <script>
+        (function() {
+            const state = {
+                currentSpeed: 0,
+                downloadSpeed: 0,
+                uploadSpeed: 0,
+                peakSpeed: 0,
+                latency: 0,
+                targetSpeed: 0,
+                isTestRunning: false,
+                wifiSSID: '—',
+                carrierName: '—',
+                networkTypeStr: 'Detectando...',
+                signalLevel: 0,
+                animationId: null,
+            };
 
-        const canvas = document.getElementById('speedometer');
-        const ctx = canvas.getContext('2d');
-        const speedValueEl = document.getElementById('speedValue');
-        const downloadSpeedEl = document.getElementById('downloadSpeed');
-        const uploadSpeedEl = document.getElementById('uploadSpeed');
-        const peakSpeedEl = document.getElementById('peakSpeed');
-        const latencyEl = document.getElementById('latency');
-        const networkTypeEl = document.getElementById('networkType');
-        const wifiSSIDEl = document.getElementById('wifiSSID');
-        const carrierNameEl = document.getElementById('carrierName');
-        const signalBarsEl = document.getElementById('signalBars');
-        const badgeNetworkEl = document.getElementById('badgeNetwork');
-        const btnTestEl = document.getElementById('btnTest');
-        const lastUpdateEl = document.getElementById('lastUpdate');
-        const statusDotEl = document.getElementById('statusDot');
-        const statusTextEl = document.getElementById('statusText');
+            const canvas = document.getElementById('speedometer');
+            const ctx = canvas.getContext('2d');
+            const speedValueEl = document.getElementById('speedValue');
+            const downloadSpeedEl = document.getElementById('downloadSpeed');
+            const uploadSpeedEl = document.getElementById('uploadSpeed');
+            const peakSpeedEl = document.getElementById('peakSpeed');
+            const latencyEl = document.getElementById('latency');
+            const networkTypeEl = document.getElementById('networkType');
+            const wifiSSIDEl = document.getElementById('wifiSSID');
+            const carrierNameEl = document.getElementById('carrierName');
+            const signalBarsEl = document.getElementById('signalBars');
+            const badgeNetworkEl = document.getElementById('badgeNetwork');
+            const btnTestEl = document.getElementById('btnTest');
+            const lastUpdateEl = document.getElementById('lastUpdate');
+            const statusDotEl = document.getElementById('statusDot');
+            const statusTextEl = document.getElementById('statusText');
 
-        const BASE_SIZE = 400;
+            const BASE_SIZE = 400;
 
-        function updateCanvasSize() {
-            const wrapper = document.querySelector('.speedometer-wrapper');
-            if (!wrapper) return;
-            const displayWidth = Math.min(wrapper.clientWidth, 400);
-            canvas.style.width = displayWidth + 'px';
-            canvas.style.height = displayWidth + 'px';
-            canvas.width = BASE_SIZE;
-            canvas.height = BASE_SIZE;
-            drawSpeedometer(state.currentSpeed);
-        }
+            function updateCanvasSize() {
+                const wrapper = document.querySelector('.speedometer-wrapper');
+                if (!wrapper) return;
+                const displayWidth = Math.min(wrapper.clientWidth, 400);
+                canvas.style.width = displayWidth + 'px';
+                canvas.style.height = displayWidth + 'px';
+                canvas.width = BASE_SIZE;
+                canvas.height = BASE_SIZE;
+                drawSpeedometer(state.currentSpeed);
+            }
 
-        function drawSpeedometer(speed) {
-            const w = BASE_SIZE;
-            const h = BASE_SIZE;
-            const centerX = w / 2;
-            const centerY = h / 2;
-            const radius = 158;
+            function drawSpeedometer(speed) {
+                const w = BASE_SIZE;
+                const h = BASE_SIZE;
+                const centerX = w / 2;
+                const centerY = h / 2;
+                const radius = 158;
 
-            ctx.clearRect(0, 0, w, h);
-
-            ctx.save();
-            ctx.shadowColor = 'rgba(0,0,0,0.8)';
-            ctx.shadowBlur = 35;
-            ctx.shadowOffsetX = 8;
-            ctx.shadowOffsetY = 8;
-
-            const outerGrad = ctx.createRadialGradient(centerX - 20, centerY - 20, radius - 40, centerX, centerY, radius + 25);
-            outerGrad.addColorStop(0, '#2c2c4a');
-            outerGrad.addColorStop(0.5, '#1a1a32');
-            outerGrad.addColorStop(1, '#0a0a18');
-
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius + 22, 0, Math.PI * 2);
-            ctx.fillStyle = outerGrad;
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            ctx.restore();
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius + 12, 0, Math.PI * 2);
-            const chromeGrad = ctx.createLinearGradient(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
-            chromeGrad.addColorStop(0, '#4a4a68');
-            chromeGrad.addColorStop(0.3, '#8888aa');
-            chromeGrad.addColorStop(0.5, '#cccce0');
-            chromeGrad.addColorStop(0.7, '#666688');
-            chromeGrad.addColorStop(1, '#2a2a44');
-            ctx.fillStyle = chromeGrad;
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            ctx.restore();
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            const bgGrad = ctx.createRadialGradient(centerX - 10, centerY - 10, radius * 0.2, centerX, centerY, radius);
-            bgGrad.addColorStop(0, '#1e1e38');
-            bgGrad.addColorStop(0.7, '#0c0c1e');
-            bgGrad.addColorStop(1, '#050510');
-            ctx.fillStyle = bgGrad;
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-            ctx.lineWidth = 5;
-            ctx.stroke();
-            ctx.restore();
-
-            const startAngle = Math.PI * 0.68;
-            const endAngle = Math.PI * 2.32;
-            const totalAngle = endAngle - startAngle;
-            const maxSpeed = 600;
-
-            for (let i = 0; i <= maxSpeed; i += 10) {
-                const angle = startAngle + (i / maxSpeed) * totalAngle;
-                const isMajor = i % 50 === 0;
-                const isMedium = i % 25 === 0 && !isMajor;
-                const innerR = radius - (isMajor ? 32 : isMedium ? 26 : 20);
-                const outerR = radius - 6;
-
-                const x1 = centerX + Math.cos(angle) * innerR;
-                const y1 = centerY + Math.sin(angle) * innerR;
-                const x2 = centerX + Math.cos(angle) * outerR;
-                const y2 = centerY + Math.sin(angle) * outerR;
+                ctx.clearRect(0, 0, w, h);
 
                 ctx.save();
+                ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                ctx.shadowBlur = 35;
+                ctx.shadowOffsetX = 8;
+                ctx.shadowOffsetY = 8;
+
+                const outerGrad = ctx.createRadialGradient(centerX - 20, centerY - 20, radius - 40, centerX, centerY, radius + 25);
+                outerGrad.addColorStop(0, '#2c2c4a');
+                outerGrad.addColorStop(0.5, '#1a1a32');
+                outerGrad.addColorStop(1, '#0a0a18');
+
                 ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-
-                if (i <= 150) { ctx.strokeStyle = '#2ed573'; }
-                else if (i <= 350) { ctx.strokeStyle = '#ffa502'; }
-                else if (i <= 500) { ctx.strokeStyle = '#ff6b81'; }
-                else { ctx.strokeStyle = '#ff4757'; }
-
-                ctx.lineWidth = isMajor ? 3.5 : isMedium ? 2 : 1;
+                ctx.arc(centerX, centerY, radius + 22, 0, Math.PI * 2);
+                ctx.fillStyle = outerGrad;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+                ctx.lineWidth = 4;
                 ctx.stroke();
                 ctx.restore();
 
-                if (isMajor) {
-                    const numRadius = radius - 54;
-                    const nx = centerX + Math.cos(angle) * numRadius;
-                    const ny = centerY + Math.sin(angle) * numRadius;
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius + 12, 0, Math.PI * 2);
+                const chromeGrad = ctx.createLinearGradient(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
+                chromeGrad.addColorStop(0, '#4a4a68');
+                chromeGrad.addColorStop(0.3, '#8888aa');
+                chromeGrad.addColorStop(0.5, '#cccce0');
+                chromeGrad.addColorStop(0.7, '#666688');
+                chromeGrad.addColorStop(1, '#2a2a44');
+                ctx.fillStyle = chromeGrad;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                const bgGrad = ctx.createRadialGradient(centerX - 10, centerY - 10, radius * 0.2, centerX, centerY, radius);
+                bgGrad.addColorStop(0, '#1e1e38');
+                bgGrad.addColorStop(0.7, '#0c0c1e');
+                bgGrad.addColorStop(1, '#050510');
+                ctx.fillStyle = bgGrad;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.lineWidth = 5;
+                ctx.stroke();
+                ctx.restore();
+
+                const startAngle = Math.PI * 0.68;
+                const endAngle = Math.PI * 2.32;
+                const totalAngle = endAngle - startAngle;
+                const maxSpeed = 600;
+
+                for (let i = 0; i <= maxSpeed; i += 10) {
+                    const angle = startAngle + (i / maxSpeed) * totalAngle;
+                    const isMajor = i % 50 === 0;
+                    const isMedium = i % 25 === 0 && !isMajor;
+                    const innerR = radius - (isMajor ? 32 : isMedium ? 26 : 20);
+                    const outerR = radius - 6;
+
+                    const x1 = centerX + Math.cos(angle) * innerR;
+                    const y1 = centerY + Math.sin(angle) * innerR;
+                    const x2 = centerX + Math.cos(angle) * outerR;
+                    const y2 = centerY + Math.sin(angle) * outerR;
 
                     ctx.save();
-                    ctx.font = 'bold 13px "Inter", -apple-system, sans-serif';
-                    ctx.fillStyle = '#ffffff';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(i.toString(), nx, ny);
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+
+                    if (i <= 150) { ctx.strokeStyle = '#2ed573'; }
+                    else if (i <= 350) { ctx.strokeStyle = '#ffa502'; }
+                    else if (i <= 500) { ctx.strokeStyle = '#ff6b81'; }
+                    else { ctx.strokeStyle = '#ff4757'; }
+
+                    ctx.lineWidth = isMajor ? 3.5 : isMedium ? 2 : 1;
+                    ctx.stroke();
                     ctx.restore();
-                }
-            }
 
-            const activeAngle = startAngle + (Math.min(Math.max(speed, 0), maxSpeed) / maxSpeed) * totalAngle;
+                    if (isMajor) {
+                        const numRadius = radius - 54;
+                        const nx = centerX + Math.cos(angle) * numRadius;
+                        const ny = centerY + Math.sin(angle) * numRadius;
 
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius - 3, startAngle, activeAngle);
-
-            const arcGrad = ctx.createLinearGradient(
-                centerX + Math.cos(startAngle) * radius,
-                centerY + Math.sin(startAngle) * radius,
-                centerX + Math.cos(endAngle) * radius,
-                centerY + Math.sin(endAngle) * radius
-            );
-            arcGrad.addColorStop(0, '#2ed573');
-            arcGrad.addColorStop(0.3, '#ffa502');
-            arcGrad.addColorStop(0.65, '#ff6b81');
-            arcGrad.addColorStop(1, '#ff4757');
-
-            ctx.strokeStyle = arcGrad;
-            ctx.lineWidth = 14;
-            ctx.lineCap = 'round';
-            ctx.stroke();
-            ctx.restore();
-
-            ctx.save();
-            ctx.translate(centerX, centerY);
-            ctx.rotate(activeAngle);
-
-            ctx.beginPath();
-            ctx.moveTo(0, -6);
-            ctx.lineTo(radius - 38, 0);
-            ctx.lineTo(0, 6);
-            ctx.closePath();
-            const needleGrad = ctx.createLinearGradient(0, -6, 0, 6);
-            needleGrad.addColorStop(0, '#ff6b6b');
-            needleGrad.addColorStop(0.5, '#ff4444');
-            needleGrad.addColorStop(1, '#cc2222');
-            ctx.fillStyle = needleGrad;
-            ctx.fill();
-            ctx.restore();
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, 12, 0, Math.PI * 2);
-            const hubGrad = ctx.createRadialGradient(centerX - 3, centerY - 3, 2, centerX, centerY, 12);
-            hubGrad.addColorStop(0, '#ddd');
-            hubGrad.addColorStop(0.5, '#888');
-            hubGrad.addColorStop(1, '#333');
-            ctx.fillStyle = hubGrad;
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            ctx.restore();
-        }
-
-        function animateSpeed() {
-            const diff = state.targetSpeed - state.currentSpeed;
-            if (Math.abs(diff) > 0.1) {
-                state.currentSpeed += diff * 0.15;
-                speedValueEl.textContent = Math.round(state.currentSpeed);
-                drawSpeedometer(state.currentSpeed);
-                state.animationId = requestAnimationFrame(animateSpeed);
-            } else {
-                state.currentSpeed = state.targetSpeed;
-                speedValueEl.textContent = Math.round(state.currentSpeed);
-                drawSpeedometer(state.currentSpeed);
-            }
-        }
-
-        function setTargetSpeed(speed) {
-            state.targetSpeed = Math.min(Math.max(speed, 0), 600);
-            if (state.animationId) cancelAnimationFrame(state.animationId);
-            state.animationId = requestAnimationFrame(animateSpeed);
-        }
-
-        function detectNetworkInfo() {
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            let typeStr = '📶 Rede Ativa';
-            let signalLevel = 3;
-            let badgeText = '🌐 Real Time';
-
-            if (connection) {
-                const effType = connection.effectiveType || '';
-                const type = connection.type || '';
-
-                if (type === 'wifi' || (effType === '4g' && !type)) {
-                    typeStr = '📶 Wi-Fi';
-                    badgeText = '📶 Wi-Fi';
-                    signalLevel = 4;
-                } else if (type === 'cellular' || ['5g', '4g', '3g'].includes(effType)) {
-                    const effMap = { '4g': '4G/LTE', '5g': '5G', '3g': '3G', '2g': '2G' };
-                    typeStr = '📱 ' + (effMap[effType] || effType.toUpperCase());
-                    badgeText = '📱 Rede Móvel';
-                    signalLevel = effType === '5g' ? 4 : effType === '4g' ? 3 : 2;
-                }
-            }
-            networkTypeEl.textContent = typeStr;
-            badgeNetworkEl.textContent = badgeText;
-            updateSignalBars(signalLevel);
-        }
-
-        function updateSignalBars(level) {
-            const bars = signalBarsEl.querySelectorAll('.signal-bar');
-            bars.forEach((bar, i) => {
-                bar.style.background = i < level ? '#2ed573' : 'rgba(255,255,255,0.15)';
-            });
-        }
-
-        function updateSSID(ssid) {
-            wifiSSIDEl.textContent = (ssid && ssid.trim() !== '') ? ssid.trim() : '—';
-        }
-
-        function updateCarrier(carrier) {
-            carrierNameEl.textContent = (carrier && carrier.trim() !== '') ? carrier.trim() : '—';
-        }
-
-        window.setWifiSSID = updateSSID;
-        window.setCarrierName = updateCarrier;
-
-        // AUXILIAR: Executa um fetch com limite de tempo estrito (Timeout)
-        async function fetchWithTimeout(url, options = {}, timeout = 7000) {
-            const controller = new AbController();
-            const id = setTimeout(() => controller.abort(), timeout);
-            try {
-                const response = await fetch(url, { ...options, signal: controller.signal });
-                clearTimeout(id);
-                return response;
-            } catch (error) {
-                clearTimeout(id);
-                throw error;
-            }
-        }
-
-        async function startSpeedTest() {
-            if (state.isTestRunning) return;
-            state.isTestRunning = true;
-            
-            btnTestEl.textContent = '⏳ Iniciando...';
-            statusTextEl.textContent = 'Testando...';
-            detectNetworkInfo();
-
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            const fallbackSpeed = (connection && connection.downlink) ? connection.downlink * 7 : 15;
-
-            // 1. LATÊNCIA REAL (PING)
-            btnTestEl.textContent = '⏱️ Testando Ping...';
-            let pings = [];
-            for (let i = 0; i < 3; i++) {
-                const start = performance.now();
-                try {
-                    await fetchWithTimeout('https://1.1.1.1/cdn-cgi/trace?n=' + start, { method: 'HEAD', cache: 'no-store', mode: 'no-cors' }, 2500);
-                    pings.push(performance.now() - start);
-                } catch (e) {
-                    pings.push(60); 
-                }
-            }
-            state.latency = pings.length ? Math.round(pings.reduce((a, b) => a + b, 0) / pings.length) : 50;
-            latencyEl.textContent = state.latency;
-
-            // 2. DOWNLOAD CONTROLADO CONTRA CONGELAMENTO (Reduzido para 12MB para ser veloz e seguro)
-            btnTestEl.textContent = '📥 Baixando...';
-            const dlUrl = 'https://speed.cloudflare.com/__down?bytes=12000000&nocache=' + Date.now();
-            
-            try {
-                const startTime = performance.now();
-                const response = await fetchWithTimeout(dlUrl, { 
-                    cache: 'no-store', 
-                    headers: { 'Cache-Control': 'no-cache, no-store' } 
-                }, 8000);
-                
-                const reader = response.body.getReader();
-                let receivedBytes = 0;
-
-                while(true) {
-                    const {done, value} = await reader.read();
-                    if (done) break;
-                    receivedBytes += value.length;
-                    
-                    const currentTime = (performance.now() - startTime) / 1000;
-                    if (currentTime > 0) {
-                        const liveMbps = (receivedBytes * 8) / 1000000 / currentTime;
-                        setTargetSpeed(liveMbps);
-                        speedValueEl.textContent = Math.round(liveMbps);
+                        ctx.save();
+                        ctx.font = 'bold 13px "Inter", -apple-system, sans-serif';
+                        ctx.fillStyle = '#ffffff';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(i.toString(), nx, ny);
+                        ctx.restore();
                     }
                 }
 
-                const totalDuration = (performance.now() - startTime) / 1000;
-                state.downloadSpeed = Math.round((receivedBytes * 8) / 1000000 / totalDuration);
-            } catch (error) {
-                state.downloadSpeed = Math.round(fallbackSpeed);
+                const activeAngle = startAngle + (Math.min(Math.max(speed, 0), maxSpeed) / maxSpeed) * totalAngle;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius - 3, startAngle, activeAngle);
+
+                const arcGrad = ctx.createLinearGradient(
+                    centerX + Math.cos(startAngle) * radius,
+                    centerY + Math.sin(startAngle) * radius,
+                    centerX + Math.cos(endAngle) * radius,
+                    centerY + Math.sin(endAngle) * radius
+                );
+                arcGrad.addColorStop(0, '#2ed573');
+                arcGrad.addColorStop(0.3, '#ffa502');
+                arcGrad.addColorStop(0.65, '#ff6b81');
+                arcGrad.addColorStop(1, '#ff4757');
+
+                ctx.strokeStyle = arcGrad;
+                ctx.lineWidth = 14;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(activeAngle);
+
+                ctx.beginPath();
+                ctx.moveTo(0, -6);
+                ctx.lineTo(radius - 38, 0);
+                ctx.lineTo(0, 6);
+                ctx.closePath();
+                const needleGrad = ctx.createLinearGradient(0, -6, 0, 6);
+                needleGrad.addColorStop(0, '#ff6b6b');
+                needleGrad.addColorStop(0.5, '#ff4444');
+                needleGrad.addColorStop(1, '#cc2222');
+                ctx.fillStyle = needleGrad;
+                ctx.fill();
+                ctx.restore();
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 12, 0, Math.PI * 2);
+                const hubGrad = ctx.createRadialGradient(centerX - 3, centerY - 3, 2, centerX, centerY, 12);
+                hubGrad.addColorStop(0, '#ddd');
+                hubGrad.addColorStop(0.5, '#888');
+                hubGrad.addColorStop(1, '#333');
+                ctx.fillStyle = hubGrad;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
             }
 
-            if (state.downloadSpeed <= 0) state.downloadSpeed = Math.round(fallbackSpeed);
-            downloadSpeedEl.textContent = state.downloadSpeed;
-            setTargetSpeed(state.downloadSpeed);
-            
-            if (state.downloadSpeed > state.peakSpeed) {
-                state.peakSpeed = state.downloadSpeed;
-                peakSpeedEl.textContent = state.peakSpeed;
-            }
-
-            await new Promise(r => setTimeout(r, 800));
-
-            // 3. UPLOAD OTIMIZADO PARA DISPOSITIVOS MÓVEIS (512 KB Seguro)
-            btnTestEl.textContent = '📤 Enviando...';
-            const arrayBuffer = new Uint8Array(512 * 1024);
-            crypto.getRandomValues(arrayBuffer);
-            const uploadBlob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
-
-            try {
-                const startTimeUp = performance.now();
-                await fetchWithTimeout('https://speed.cloudflare.com/__up?nocache=' + Date.now(), { 
-                    method: 'POST', 
-                    body: uploadBlob, 
-                    cache: 'no-store',
-                    headers: { 'Cache-Control': 'no-cache' }
-                }, 5000); // Teto de 5 segundos para o upload não travar a UI
-
-                const totalDurationUp = (performance.now() - startTimeUp) / 1000;
-                state.uploadSpeed = Math.round((uploadBlob.size * 8) / 1000000 / totalDurationUp);
-                
-                if (state.uploadSpeed > state.downloadSpeed * 1.2) {
-                    state.uploadSpeed = Math.round(state.downloadSpeed * 0.5);
+            function animateSpeed() {
+                const diff = state.targetSpeed - state.currentSpeed;
+                if (Math.abs(diff) > 0.1) {
+                    state.currentSpeed += diff * 0.15;
+                    speedValueEl.textContent = Math.round(state.currentSpeed);
+                    drawSpeedometer(state.currentSpeed);
+                    state.animationId = requestAnimationFrame(animateSpeed);
+                } else {
+                    state.currentSpeed = state.targetSpeed;
+                    speedValueEl.textContent = Math.round(state.currentSpeed);
+                    drawSpeedometer(state.currentSpeed);
                 }
-            } catch (error) {
-                state.uploadSpeed = Math.round(state.downloadSpeed * 0.4);
             }
 
-            if (state.uploadSpeed <= 0) state.uploadSpeed = Math.round(state.downloadSpeed * 0.4);
-            uploadSpeedEl.textContent = state.uploadSpeed;
-            setTargetSpeed(state.uploadSpeed);
-
-            await new Promise(r => setTimeout(r, 1200)); 
-            setTargetSpeed(0);
-
-            // DESBLOQUEIO DE SEGURANÇA COMPLETO
-            state.isTestRunning = false;
-            btnTestEl.textContent = '🚀 Testar Velocidade';
-            statusTextEl.textContent = 'Conectado';
-            lastUpdateEl.textContent = 'Último: ' + new Date().toLocaleTimeString('pt-BR');
-
-            if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
-                const dadosFinais = state.downloadSpeed + '|' + state.uploadSpeed + '|' + state.latency;
-                window.AppInventor.setWebViewString(dadosFinais);
+            function setTargetSpeed(speed) {
+                state.targetSpeed = Math.min(Math.max(speed, 0), 600);
+                if (state.animationId) cancelAnimationFrame(state.animationId);
+                state.animationId = requestAnimationFrame(animateSpeed);
             }
-        }
 
-        function resetData() {
-            if (state.isTestRunning) return;
-            state.targetSpeed = 0;
-            state.downloadSpeed = 0;
-            state.uploadSpeed = 0;
-            state.latency = 0;
-            state.peakSpeed = 0;
-            setTargetSpeed(0);
-            downloadSpeedEl.textContent = '0';
-            uploadSpeedEl.textContent = '0';
-            latencyEl.textContent = '0';
-            peakSpeedEl.textContent = '0';
-            lastUpdateEl.textContent = 'Último teste: --:--';
-        }
+            function detectNetworkInfo() {
+                const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                let typeStr = '📶 Rede Ativa';
+                let signalLevel = 3;
+                let badgeText = '🌐 Real Time';
 
-        function init() {
-            updateCanvasSize();
-            detectNetworkInfo();
-            drawSpeedometer(0);
-            window.addEventListener('resize', updateCanvasSize);
-            window.startSpeedTest = startSpeedTest;
-            window.resetData = resetData;
-            
-            if (window.AppInventor) {
-                if (typeof window.initialSSID !== 'undefined') updateSSID(window.initialSSID);
-                if (typeof window.initialCarrier !== 'undefined') updateCarrier(window.initialCarrier);
+                if (connection) {
+                    const effType = connection.effectiveType || '';
+                    const type = connection.type || '';
+
+                    if (type === 'wifi' || (effType === '4g' && !type)) {
+                        typeStr = '📶 Wi-Fi';
+                        badgeText = '📶 Wi-Fi';
+                        signalLevel = 4;
+                    } else if (type === 'cellular' || ['5g', '4g', '3g'].includes(effType)) {
+                        const effMap = { '4g': '4G/LTE', '5g': '5G', '3g': '3G', '2g': '2G' };
+                        typeStr = '📱 ' + (effMap[effType] || effType.toUpperCase());
+                        badgeText = '📱 Rede Móvel';
+                        signalLevel = effType === '5g' ? 4 : effType === '4g' ? 3 : 2;
+                    }
+                }
+                networkTypeEl.textContent = typeStr;
+                badgeNetworkEl.textContent = badgeText;
+                updateSignalBars(signalLevel);
             }
-        }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-    })();
-</script>
+            function updateSignalBars(level) {
+                const bars = signalBarsEl.querySelectorAll('.signal-bar');
+                bars.forEach((bar, i) => {
+                    bar.style.background = i < level ? '#2ed573' : 'rgba(255,255,255,0.15)';
+                });
+            }
+
+            function updateSSID(ssid) {
+                wifiSSIDEl.textContent = (ssid && ssid.trim() !== '') ? ssid.trim() : '—';
+            }
+
+            function updateCarrier(carrier) {
+                carrierNameEl.textContent = (carrier && carrier.trim() !== '') ? carrier.trim() : '—';
+            }
+
+            window.setWifiSSID = updateSSID;
+            window.setCarrierName = updateCarrier;
+
+            async function fetchWithTimeout(url, options = {}, timeout = 7000) {
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), timeout);
+                try {
+                    const response = await fetch(url, { ...options, signal: controller.signal });
+                    clearTimeout(id);
+                    return response;
+                } catch (error) {
+                    clearTimeout(id);
+                    throw error;
+                }
+            }
+
+            async function startSpeedTest() {
+                if (state.isTestRunning) return;
+                state.isTestRunning = true;
+                
+                btnTestEl.textContent = '⏳ Iniciando...';
+                statusTextEl.textContent = 'Testando...';
+                detectNetworkInfo();
+
+                const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                const fallbackSpeed = (connection && connection.downlink) ? connection.downlink * 7 : 15;
+
+                // 1. LATÊNCIA REAL (PING)
+                btnTestEl.textContent = '⏱️ Testando Ping...';
+                let pings = [];
+                for (let i = 0; i < 3; i++) {
+                    const start = performance.now();
+                    try {
+                        await fetchWithTimeout('https://1.1.1.1/cdn-cgi/trace?n=' + start, { method: 'HEAD', cache: 'no-store', mode: 'no-cors' }, 2500);
+                        pings.push(performance.now() - start);
+                    } catch (e) {
+                        pings.push(60); 
+                    }
+                }
+                state.latency = pings.length ? Math.round(pings.reduce((a, b) => a + b, 0) / pings.length) : 50;
+                latencyEl.textContent = state.latency;
+
+                // 2. DOWNLOAD CONTROLADO CONTRA CONGELAMENTO
+                btnTestEl.textContent = '📥 Baixando...';
+                const dlUrl = 'https://speed.cloudflare.com/__down?bytes=12000000&nocache=' + Date.now();
+                
+                try {
+                    const startTime = performance.now();
+                    const response = await fetchWithTimeout(dlUrl, { 
+                        cache: 'no-store', 
+                        headers: { 'Cache-Control': 'no-cache, no-store' } 
+                    }, 8000);
+                    
+                    const reader = response.body.getReader();
+                    let receivedBytes = 0;
+
+                    while(true) {
+                        const {done, value} = await reader.read();
+                        if (done) break;
+                        receivedBytes += value.length;
+                        
+                        const currentTime = (performance.now() - startTime) / 1000;
+                        if (currentTime > 0) {
+                            const liveMbps = (receivedBytes * 8) / 1000000 / currentTime;
+                            setTargetSpeed(liveMbps);
+                            speedValueEl.textContent = Math.round(liveMbps);
+                        }
+                    }
+
+                    const totalDuration = (performance.now() - startTime) / 1000;
+                    state.downloadSpeed = Math.round((receivedBytes * 8) / 1000000 / totalDuration);
+                } catch (error) {
+                    state.downloadSpeed = Math.round(fallbackSpeed);
+                }
+
+                if (state.downloadSpeed <= 0) state.downloadSpeed = Math.round(fallbackSpeed);
+                downloadSpeedEl.textContent = state.downloadSpeed;
+                setTargetSpeed(state.downloadSpeed);
+                
+                if (state.downloadSpeed > state.peakSpeed) {
+                    state.peakSpeed = state.downloadSpeed;
+                    peakSpeedEl.textContent = state.peakSpeed;
+                }
+
+                await new Promise(r => setTimeout(r, 800));
+
+                // 3. UPLOAD OTIMIZADO PARA DISPOSITIVOS MÓVEIS (512 KB Seguro)
+                btnTestEl.textContent = '📤 Enviando...';
+                const arrayBuffer = new Uint8Array(512 * 1024);
+                crypto.getRandomValues(arrayBuffer);
+                const uploadBlob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
+
+                try {
+                    const startTimeUp = performance.now();
+                    await fetchWithTimeout('https://speed.cloudflare.com/__up?nocache=' + Date.now(), { 
+                        method: 'POST', 
+                        body: uploadBlob, 
+                        cache: 'no-store',
+                        headers: { 'Cache-Control': 'no-cache' }
+                    }, 5000);
+
+                    const totalDurationUp = (performance.now() - startTimeUp) / 1000;
+                    state.uploadSpeed = Math.round((uploadBlob.size * 8) / 1000000 / totalDurationUp);
+                    
+                    if (state.uploadSpeed > state.downloadSpeed * 1.2) {
+                        state.uploadSpeed = Math.round(state.downloadSpeed * 0.5);
+                    }
+                } catch (error) {
+                    state.uploadSpeed = Math.round(state.downloadSpeed * 0.4);
+                }
+
+                if (state.uploadSpeed <= 0) state.uploadSpeed = Math.round(state.downloadSpeed * 0.4);
+                uploadSpeedEl.textContent = state.uploadSpeed;
+                setTargetSpeed(state.uploadSpeed);
+
+                await new Promise(r => setTimeout(r, 1200)); 
+                setTargetSpeed(0);
+
+                // ENCERRAMENTO TOTAL E ENVIO COMPATÍVEL COM OS BLOCOS DO KODULAR
+                state.isTestRunning = false;
+                btnTestEl.textContent = '🚀 Testar Velocidade';
+                statusTextEl.textContent = 'Conectado';
+                lastUpdateEl.textContent = 'Último: ' + new Date().toLocaleTimeString('pt-BR');
+
+                // Linha de comunicação perfeitamente alinhada com o bloco "split text at |" do Kodular
+                if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+                    const stringParaKodular = state.downloadSpeed + '|' + state.uploadSpeed + '|' + state.latency;
+                    window.AppInventor.setWebViewString(stringParaKodular);
+                }
+            }
+
+            function resetData() {
+                if (state.isTestRunning) return;
+                state.targetSpeed = 0;
+                state.downloadSpeed = 0;
+                state.uploadSpeed = 0;
+                state.latency = 0;
+                state.peakSpeed = 0;
+                setTargetSpeed(0);
+                downloadSpeedEl.textContent = '0';
+                uploadSpeedEl.textContent = '0';
+                latencyEl.textContent = '0';
+                peakSpeedEl.textContent = '0';
+                lastUpdateEl.textContent = 'Último teste: --:--';
+            }
+
+            function init() {
+                updateCanvasSize();
+                detectNetworkInfo();
+                drawSpeedometer(0);
+                window.addEventListener('resize', updateCanvasSize);
+                window.startSpeedTest = startSpeedTest;
+                window.resetData = resetData;
+                
+                if (window.AppInventor) {
+                    if (typeof window.initialSSID !== 'undefined') updateSSID(window.initialSSID);
+                    if (typeof window.initialCarrier !== 'undefined') updateCarrier(window.initialCarrier);
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
 </body>
 </html>
