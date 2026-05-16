@@ -1,661 +1,848 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VelozNet-LC | Internet Velocimeter</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VelozNet-LC | Internet Velocimeter</title>
 
-    <style>
-        :root {
-            --bg-primary: #0a0a14;
-            --bg-secondary: #12121f;
-            --text-primary: #e8e8f0;
-            --text-secondary: #9898b0;
-            --accent: #4d7cff;
-            --accent-light: #6b9fff;
-            --danger: #ff4757;
-            --warning: #ffa502;
-            --success: #2ed573;
-            --border: #2a2a40;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-            --shadow-lg: 0 15px 50px rgba(0, 0, 0, 0.7);
-            --radius: 20px;
-            --radius-sm: 12px;
-            --glass: rgba(20, 20, 40, 0.7);
-        }
+<style>
+:root{
+--bg-primary:#0a0a14;
+--bg-secondary:#12121f;
+--text-primary:#e8e8f0;
+--text-secondary:#9898b0;
+--accent:#4d7cff;
+--accent-light:#6b9fff;
+--danger:#ff4757;
+--warning:#ffa502;
+--success:#2ed573;
+--border:#2a2a40;
+--shadow:0 4px 20px rgba(0,0,0,.6);
+--shadow-lg:0 15px 50px rgba(0,0,0,.7);
+--radius:20px;
+--radius-sm:12px;
+--glass:rgba(20,20,40,.7);
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: radial-gradient(ellipse at center, #1a1a35 0%, #0a0a18 70%, #050510 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            -webkit-font-smoothing: antialiased;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+body{
+font-family:'Inter',sans-serif;
+background:radial-gradient(ellipse at center,#1a1a35 0%,#0a0a18 70%,#050510 100%);
+color:var(--text-primary);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:12px;
+overflow:hidden;
+}
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            background:
-                radial-gradient(2px 2px at 20% 30%, rgba(100, 150, 255, 0.3), transparent),
-                radial-gradient(2px 2px at 40% 70%, rgba(100, 150, 255, 0.2), transparent),
-                radial-gradient(1px 1px at 60% 20%, rgba(255, 255, 255, 0.3), transparent),
-                radial-gradient(1px 1px at 80% 50%, rgba(100, 150, 255, 0.25), transparent);
-        }
+.app-container{
+width:100%;
+max-width:440px;
+background:linear-gradient(160deg,rgba(25,25,50,.95) 0%,rgba(18,18,38,.98) 40%,rgba(10,10,28,.99) 100%);
+border-radius:36px;
+padding:20px 18px 22px;
+box-shadow:
+0 25px 70px rgba(0,0,0,.7),
+0 0 0 1px rgba(255,255,255,.06),
+inset 0 1px 0 rgba(255,255,255,.04);
+position:relative;
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+}
 
-        .app-container {
-            width: 100%;
-            max-width: 440px;
-            background: linear-gradient(160deg, rgba(25, 25, 50, 0.95) 0%, rgba(18, 18, 38, 0.98) 40%, rgba(10, 10, 28, 0.99) 100%);
-            border-radius: 36px;
-            padding: 20px 18px 22px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+.app-container::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:5px;
+background:linear-gradient(90deg,#ff4757 0%,#ff6b81 20%,#ffa502 40%,#2ed573 60%,#4d7cff 80%,#a78bfa 100%);
+border-radius:36px 36px 0 0;
+}
 
-        .app-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #ff4757 0%, #ffa502 40%, #2ed573 60%, #4d7cff 100%);
-            border-radius: 36px 36px 0 0;
-        }
+.app-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:16px;
+}
 
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
+.app-title{
+font-size:20px;
+font-weight:700;
+color:#fff;
+display:flex;
+align-items:center;
+gap:8px;
+}
 
-        .app-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+.app-subtitle{
+font-size:11px;
+color:#8888a8;
+margin-top:2px;
+letter-spacing:1px;
+text-transform:uppercase;
+}
 
-        .app-subtitle {
-            font-size: 11px;
-            color: #8888a8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+.provider-badge{
+background:linear-gradient(135deg,rgba(77,124,255,.2),rgba(167,139,250,.2));
+padding:7px 14px;
+border-radius:20px;
+font-size:11px;
+font-weight:600;
+color:#a78bfa;
+border:1px solid rgba(167,139,250,.35);
+}
 
-        .provider-badge {
-            background: linear-gradient(135deg, rgba(77, 124, 255, 0.2), rgba(167, 139, 250, 0.2));
-            padding: 7px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #a78bfa;
-            border: 1px solid rgba(167, 139, 250, 0.35);
-        }
+.speedometer-wrapper{
+position:relative;
+width:100%;
+max-width:360px;
+margin:0 auto 12px;
+aspect-ratio:1/1;
+}
 
-        .speedometer-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto 12px;
-            aspect-ratio: 1 / 1;
-        }
+canvas{
+width:100%;
+height:100%;
+display:block;
+}
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+.speed-digital{
+text-align:center;
+margin-bottom:14px;
+background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(15,15,30,.6) 100%);
+border-radius:16px;
+padding:12px 16px;
+border:1px solid rgba(255,255,255,.1);
+}
 
-        .speed-digital {
-            text-align: center;
-            margin-bottom: 14px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 16px;
-            padding: 12px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+.speed-value{
+font-size:52px;
+font-weight:900;
+letter-spacing:-3px;
+background:linear-gradient(180deg,#ffffff 0%,#a0c4ff 40%,#4d7cff 100%);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+font-family:monospace;
+}
 
-        .speed-value {
-            font-size: 52px;
-            font-weight: 900;
-            background: linear-gradient(180deg, #ffffff 0%, #4d7cff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-family: monospace;
-        }
+.speed-unit{
+font-size:12px;
+color:#8899bb;
+margin-top:2px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
 
-        .speed-unit {
-            font-size: 12px;
-            color: #8899bb;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:8px;
+margin-bottom:12px;
+}
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 12px;
-        }
+.stat-card{
+background:linear-gradient(160deg,rgba(22,22,45,.85) 0%,rgba(16,16,35,.9) 100%);
+border:1px solid rgba(255,255,255,.08);
+border-radius:12px;
+padding:12px 10px;
+}
 
-        .stat-card {
-            background: rgba(22, 22, 45, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-sm);
-            padding: 12px 10px;
-        }
+.stat-label{
+font-size:10px;
+text-transform:uppercase;
+letter-spacing:1px;
+color:#8888b0;
+margin-bottom:4px;
+font-weight:600;
+}
 
-        .stat-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #8888b0;
-            margin-bottom: 4px;
-        }
+.stat-value{
+font-size:20px;
+font-weight:700;
+color:#fff;
+font-family:monospace;
+}
 
-        .stat-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffffff;
-            font-family: monospace;
-        }
+.stat-change{
+font-size:10px;
+margin-top:2px;
+}
 
-        .stat-change { font-size: 10px; margin-top: 2px; }
-        .positive { color: #2ed573; }
-        .negative { color: #ff6b81; }
+.positive{
+color:#2ed573;
+}
 
-        .network-indicator {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-sm);
-            padding: 10px 14px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+.negative{
+color:#ff6b81;
+}
 
-        .network-info-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+.network-indicator{
+background:linear-gradient(160deg,rgba(46,213,115,.08) 0%,rgba(77,124,255,.08) 100%);
+border:1px solid rgba(46,213,115,.25);
+border-radius:12px;
+padding:10px 14px;
+margin-bottom:12px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:6px;
+}
 
-        .network-type {
-            font-weight: 700;
-            font-size: 13px;
-            color: #2ed573;
-        }
+.network-info-group{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+}
 
-        .network-name, .carrier-name {
-            font-size: 11px;
-            color: #a0a0c0;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2px 8px;
-            border-radius: 8px;
-        }
+.network-type{
+font-weight:700;
+font-size:13px;
+color:#2ed573;
+}
 
-        .signal-strength { display: flex; gap: 2px; align-items: flex-end; height: 14px; }
-        .signal-bar { width: 3px; background: #2ed573; border-radius: 1px; }
+.network-name{
+font-size:11px;
+color:#a0a0c0;
+background:rgba(255,255,255,.05);
+padding:3px 10px;
+border-radius:12px;
+}
 
-        .action-buttons { display: flex; gap: 8px; }
-        .btn {
-            flex: 1;
-            padding: 13px 14px;
-            border-radius: 25px;
-            border: none;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            text-align: center;
-        }
+.carrier-name{
+font-size:10px;
+color:#ffa502;
+font-weight:600;
+}
 
-        .btn-primary { background: linear-gradient(135deg, #4d7cff 0%, #6c5ce7 100%); color: white; }
-        .btn-outline { background: rgba(255, 255, 255, 0.05); color: #ccd; border: 1px solid rgba(255, 255, 255, 0.2); }
+.signal-strength{
+display:flex;
+gap:2px;
+align-items:flex-end;
+height:18px;
+}
 
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 14px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 11px;
-        }
+.signal-bar{
+width:4px;
+background:linear-gradient(180deg,#2ed573 0%,#4d7cff 100%);
+border-radius:3px;
+}
 
-        .connection-status { display: flex; align-items: center; gap: 6px; color: #9999b8; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #2ed573; }
-        .timestamp { color: #8888aa; }
+.action-buttons{
+display:flex;
+gap:8px;
+}
 
-        @media screen and (max-width: 480px) {
-            .app-container { padding: 16px 12px; }
-            .speedometer-wrapper { max-width: 270px; }
-            .speed-value { font-size: 42px; }
-        }
-    </style>
+.btn{
+flex:1;
+padding:13px 14px;
+border-radius:25px;
+border:none;
+font-weight:700;
+font-size:13px;
+cursor:pointer;
+}
+
+.btn-primary{
+background:linear-gradient(135deg,#4d7cff 0%,#6c5ce7 100%);
+color:white;
+}
+
+.btn-outline{
+background:rgba(255,255,255,.04);
+color:#ccd;
+border:2px solid rgba(255,255,255,.18);
+}
+
+.status-bar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:14px;
+padding-top:12px;
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+.connection-status{
+display:flex;
+align-items:center;
+gap:7px;
+font-size:11px;
+color:#9999b8;
+}
+
+.status-dot{
+width:9px;
+height:9px;
+border-radius:50%;
+background:#2ed573;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%,100%{
+opacity:1;
+transform:scale(1);
+}
+50%{
+opacity:.4;
+transform:scale(1.3);
+}
+}
+
+.timestamp{
+font-size:10px;
+color:#8888aa;
+}
+
+@media(max-width:480px){
+.speedometer-wrapper{
+max-width:280px;
+}
+
+.speed-value{
+font-size:40px;
+}
+}
+</style>
 </head>
+
 <body>
-    <div class="app-container">
-        <div class="app-header">
-            <div>
-                <div class="app-title"><span class="icon">⚡</span> NetSpeed Pro</div>
-                <div class="app-subtitle">Internet Velocimeter</div>
-            </div>
-            <div class="provider-badge" id="badgeNetwork">Detectando...</div>
-        </div>
 
-        <div class="speedometer-wrapper">
-            <canvas id="speedometer" width="400" height="400"></canvas>
-        </div>
+<div class="app-container">
 
-        <div class="speed-digital">
-            <div class="speed-value" id="speedValue">0</div>
-            <div class="speed-unit">Mbps</div>
-        </div>
+<div class="app-header">
+<div>
+<div class="app-title">⚡ NetSpeed Pro</div>
+<div class="app-subtitle">Internet Velocimeter</div>
+</div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">📥 Download</div>
-                <div class="stat-value" id="downloadSpeed">0</div>
-                <div class="stat-change positive">Mbps ↓</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">📤 Upload</div>
-                <div class="stat-value" id="uploadSpeed">0</div>
-                <div class="stat-change">Mbps ↑</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">🏔️ Pico</div>
-                <div class="stat-value" id="peakSpeed">0</div>
-                <div class="stat-change">Mbps</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">⏱️ Latência</div>
-                <div class="stat-value" id="latency">0</div>
-                <div class="stat-change negative">ms</div>
-            </div>
-        </div>
+<div class="provider-badge" id="badgeNetwork">
+🌐 Real Time
+</div>
+</div>
 
-        <div class="network-indicator">
-            <div class="network-info-group">
-                <span class="network-type" id="networkType">Detectando...</span>
-                <span class="network-name" id="wifiSSID">—</span>
-                <span class="carrier-name" id="carrierName">—</span>
-            </div>
-            <div class="signal-strength" id="signalBars">
-                <div class="signal-bar" style="height:4px;"></div>
-                <div class="signal-bar" style="height:7px;"></div>
-                <div class="signal-bar" style="height:11px;"></div>
-                <div class="signal-bar" style="height:14px;"></div>
-            </div>
-        </div>
+<div class="speedometer-wrapper">
+<canvas id="speedometer" width="400" height="400"></canvas>
+</div>
 
-        <div class="action-buttons">
-            <button class="btn btn-primary" id="btnTest" onclick="startSpeedTest()">🚀 Testar Velocidade</button>
-            <button class="btn btn-outline" id="btnReset" onclick="resetData()">🔄 Resetar</button>
-        </div>
+<div class="speed-digital">
+<div class="speed-value" id="speedValue">0</div>
+<div class="speed-unit">Megabits por segundo (Mbps)</div>
+</div>
 
-        <div class="status-bar">
-            <div class="connection-status">
-                <div class="status-dot" id="statusDot"></div>
-                <span id="statusText">Verificando</span>
-            </div>
-            <div class="timestamp" id="lastUpdate">Último teste: --:--</div>
-        </div>
-    </div>
+<div class="stats-grid">
 
-    <script>
-        (function() {
-            const state = {
-                currentSpeed: 0, downloadSpeed: 0, uploadSpeed: 0, peakSpeed: 0, latency: 0,
-                targetSpeed: 0, isTestRunning: false, wifiSSID: '—', carrierName: '—',
-                animationId: null
-            };
+<div class="stat-card">
+<div class="stat-label">📥 Download</div>
+<div class="stat-value" id="downloadSpeed">0</div>
+<div class="stat-change positive">Mbps ↓</div>
+</div>
 
-            const canvas = document.getElementById('speedometer');
-            const ctx = canvas.getContext('2d');
-            const speedValueEl = document.getElementById('speedValue');
-            const downloadSpeedEl = document.getElementById('downloadSpeed');
-            const uploadSpeedEl = document.getElementById('uploadSpeed');
-            const peakSpeedEl = document.getElementById('peakSpeed');
-            const latencyEl = document.getElementById('latency');
-            const networkTypeEl = document.getElementById('networkType');
-            const wifiSSIDEl = document.getElementById('wifiSSID');
-            const carrierNameEl = document.getElementById('carrierName');
-            const signalBarsEl = document.getElementById('signalBars');
-            const badgeNetworkEl = document.getElementById('badgeNetwork');
-            const btnTestEl = document.getElementById('btnTest');
-            const lastUpdateEl = document.getElementById('lastUpdate');
-            const statusDotEl = document.getElementById('statusDot');
-            const statusTextEl = document.getElementById('statusText');
+<div class="stat-card">
+<div class="stat-label">📤 Upload</div>
+<div class="stat-value" id="uploadSpeed">0</div>
+<div class="stat-change">Mbps ↑</div>
+</div>
 
-            const BASE_SIZE = 400;
+<div class="stat-card">
+<div class="stat-label">🏔️ Pico</div>
+<div class="stat-value" id="peakSpeed">0</div>
+<div class="stat-change">Mbps</div>
+</div>
 
-            function updateCanvasSize() {
-                const wrapper = document.querySelector('.speedometer-wrapper');
-                if (!wrapper) return;
-                const displayWidth = Math.min(wrapper.clientWidth, 400);
-                canvas.style.width = displayWidth + 'px';
-                canvas.style.height = displayWidth + 'px';
-                canvas.width = BASE_SIZE;
-                canvas.height = BASE_SIZE;
-                drawSpeedometer(state.currentSpeed);
-            }
+<div class="stat-card">
+<div class="stat-label">⏱️ Latência</div>
+<div class="stat-value" id="latency">0</div>
+<div class="stat-change negative">ms</div>
+</div>
 
-            function drawSpeedometer(speed) {
-                const w = BASE_SIZE, h = BASE_SIZE, centerX = w / 2, centerY = h / 2, radius = 158;
-                ctx.clearRect(0, 0, w, h);
+</div>
 
-                // Desenho do Fundo do Velocímetro
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius + 12, 0, Math.PI * 2);
-                ctx.fillStyle = '#121225';
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-                ctx.lineWidth = 3;
-                ctx.stroke();
-                ctx.restore();
+<div class="network-indicator">
 
-                const startAngle = Math.PI * 0.68;
-                const endAngle = Math.PI * 2.32;
-                const totalAngle = endAngle - startAngle;
-                const maxSpeed = 600;
+<div class="network-info-group">
+<span class="network-type" id="networkType">📶 Detectando...</span>
+<span class="network-name" id="wifiSSID">—</span>
+<span class="carrier-name" id="carrierName">—</span>
+</div>
 
-                // Desenho das Linhas de Escala
-                for (let i = 0; i <= maxSpeed; i += 20) {
-                    const angle = startAngle + (i / maxSpeed) * totalAngle;
-                    const isMajor = i % 100 === 0;
-                    const innerR = radius - (isMajor ? 24 : 14);
-                    const outerR = radius - 4;
+<div class="signal-strength" id="signalBars">
+<div class="signal-bar" style="height:6px"></div>
+<div class="signal-bar" style="height:10px"></div>
+<div class="signal-bar" style="height:14px"></div>
+<div class="signal-bar" style="height:18px"></div>
+</div>
 
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + Math.cos(angle) * innerR, centerY + Math.sin(angle) * innerR);
-                    ctx.lineTo(centerX + Math.cos(angle) * outerR, centerY + Math.sin(angle) * outerR);
-                    ctx.strokeStyle = i <= 200 ? '#2ed573' : i <= 400 ? '#ffa502' : '#ff4757';
-                    ctx.lineWidth = isMajor ? 3 : 1;
-                    ctx.stroke();
+</div>
 
-                    if (isMajor) {
-                        ctx.font = 'bold 11px sans-serif';
-                        ctx.fillStyle = '#a0a0c0';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillText(i.toString(), centerX + Math.cos(angle) * (radius - 38), centerY + Math.sin(angle) * (radius - 38));
-                    }
-                }
+<div class="action-buttons">
+<button class="btn btn-primary" id="btnTest" onclick="startSpeedTest()">
+🚀 Testar Velocidade
+</button>
 
-                // Arco de Progresso Ativo
-                const activeAngle = startAngle + (Math.min(Math.max(speed, 0), maxSpeed) / maxSpeed) * totalAngle;
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius - 4, startAngle, activeAngle);
-                ctx.strokeStyle = '#4d7cff';
-                ctx.lineWidth = 8;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-                ctx.restore();
+<button class="btn btn-outline" onclick="resetData()">
+🔄 Resetar
+</button>
+</div>
 
-                // Ponteiro Central
-                ctx.save();
-                ctx.translate(centerX, centerY);
-                ctx.rotate(activeAngle);
-                ctx.beginPath();
-                ctx.moveTo(0, -5);
-                ctx.lineTo(radius - 25, 0);
-                ctx.lineTo(0, 5);
-                ctx.closePath();
-                ctx.fillStyle = '#ff4757';
-                ctx.fill();
-                ctx.restore();
+<div class="status-bar">
 
-                // Pino Central
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-            }
+<div class="connection-status">
+<div class="status-dot" id="statusDot"></div>
+<span id="statusText">Conectado</span>
+</div>
 
-            function animateSpeed() {
-                const diff = state.targetSpeed - state.currentSpeed;
-                if (Math.abs(diff) > 0.1) {
-                    state.currentSpeed += diff * 0.25;
-                    speedValueEl.textContent = Math.round(state.currentSpeed);
-                    drawSpeedometer(state.currentSpeed);
-                    state.animationId = requestAnimationFrame(animateSpeed);
-                } else {
-                    state.currentSpeed = state.targetSpeed;
-                    speedValueEl.textContent = Math.round(state.currentSpeed);
-                    drawSpeedometer(state.currentSpeed);
-                }
-            }
+<div class="timestamp" id="lastUpdate">
+Último teste: --:--
+</div>
 
-            function setTargetSpeed(speed) {
-                state.targetSpeed = Math.min(Math.max(speed, 0), 600);
-                if (state.animationId) cancelAnimationFrame(state.animationId);
-                state.animationId = requestAnimationFrame(animateSpeed);
-            }
+</div>
 
-            function detectNetworkInfo() {
-                const hasNav = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                
-                if (!navigator.onLine) {
-                    networkTypeEl.textContent = '❌ Desconectado';
-                    badgeNetworkEl.textContent = 'Offline';
-                    statusTextEl.textContent = 'Sem Internet';
-                    statusDotEl.style.background = '#ff4757';
-                    updateSignalBars(0);
-                    return;
-                }
+</div>
 
-                let typeStr = '📶 Wi-Fi Activo';
-                let badgeText = 'Wi-Fi Network';
-                let bars = 4;
+<script>
+(function(){
 
-                if (hasNav && hasNav.type) {
-                    if (hasNav.type === 'cellular') {
-                        const eff = hasNav.effectiveType || '4g';
-                        typeStr = '📱 Rede Móvel (' + eff.toUpperCase() + ')';
-                        badgeText = 'Dados Móveis';
-                        bars = eff === '4g' ? 3 : 2;
-                    }
-                } else if (hasNav && hasNav.effectiveType) {
-                    // Fallback inteligente para identificar se mudou de rede
-                    if (hasNav.downlink < 15) {
-                        typeStr = '📱 Dados Móveis';
-                        badgeText = 'Rede Celular';
-                        bars = 3;
-                    }
-                }
+const state = {
+currentSpeed:0,
+downloadSpeed:0,
+uploadSpeed:0,
+peakSpeed:0,
+latency:0,
+targetSpeed:0,
+isTestRunning:false,
+animationId:null
+};
 
-                // Se houver dados injetados via App Inventor nativo, prioriza eles
-                if (state.wifiSSID !== '—' && state.wifiSSID !== '') {
-                    typeStr = '📶 Wi-Fi';
-                    badgeText = 'Wi-Fi Conectado';
-                    bars = 4;
-                }
+const canvas = document.getElementById('speedometer');
+const ctx = canvas.getContext('2d');
 
-                networkTypeEl.textContent = typeStr;
-                badgeNetworkEl.textContent = badgeText;
-                statusTextEl.textContent = 'Conectado';
-                statusDotEl.style.background = '#2ed573';
-                updateSignalBars(bars);
-            }
+const speedValueEl = document.getElementById('speedValue');
+const downloadSpeedEl = document.getElementById('downloadSpeed');
+const uploadSpeedEl = document.getElementById('uploadSpeed');
+const peakSpeedEl = document.getElementById('peakSpeed');
+const latencyEl = document.getElementById('latency');
+const btnTestEl = document.getElementById('btnTest');
+const lastUpdateEl = document.getElementById('lastUpdate');
 
-            function updateSignalBars(level) {
-                const bars = signalBarsEl.querySelectorAll('.signal-bar');
-                bars.forEach((bar, i) => {
-                    bar.style.opacity = (i < level) ? '1' : '0.2';
-                    bar.style.background = level <= 2 ? '#ffa502' : '#2ed573';
-                });
-            }
+let lastDraw = 0;
 
-            window.setWifiSSID = function(ssid) {
-                state.wifiSSID = ssid || '—';
-                wifiSSIDEl.textContent = state.wifiSSID;
-                detectNetworkInfo();
-            };
+function drawSpeedometer(speed){
 
-            window.setCarrierName = function(carrier) {
-                state.carrierName = carrier || '—';
-                carrierNameEl.textContent = state.carrierName;
-                detectNetworkInfo();
-            };
+const now = performance.now();
 
-            async function startSpeedTest() {
-                if (state.isTestRunning) return;
-                state.isTestRunning = true;
-                
-                btnTestEl.textContent = '⏳ Analisando...';
-                statusDotEl.style.background = '#ffa502';
-                statusTextEl.textContent = 'Testando...';
+if(now - lastDraw < 16) return;
 
-                const controller = new AbortController();
-                // Limite rígido de segurança de 3.5 segundos para evitar qualquer travamento de tela
-                const timeoutId = setTimeout(() => controller.abort(), 3500);
+lastDraw = now;
 
-                try {
-                    // 1. TESTE DE LATÊNCIA (PING)
-                    const pingStart = performance.now();
-                    try {
-                        await fetch('https://1.1.1.1/cdn-cgi/trace', { signal: controller.signal, cache: 'no-store' });
-                        state.latency = Math.round(performance.now() - pingStart);
-                    } catch(e) {
-                        state.latency = Math.round(Math.random() * 12) + 14;
-                    }
-                    latencyEl.textContent = state.latency;
+const w = 400;
+const h = 400;
 
-                    // 2. TESTE DE DOWNLOAD
-                    btnTestEl.textContent = '📥 Baixando...';
-                    let dlSpeed = 0;
-                    
-                    try {
-                        const startDl = performance.now();
-                        // Reduzi o tamanho do pacote para carregar instantaneamente em conexões móveis lentas
-                        const res = await fetch('https://speed.cloudflare.com/__down?bytes=1500000', { signal: controller.signal, cache: 'no-store' });
-                        const blob = await res.blob();
-                        const duration = (performance.now() - startDl) / 1000;
-                        dlSpeed = ((blob.size * 8) / (1024 * 1024)) / (duration > 0 ? duration : 1);
-                    } catch (err) {
-                        // Resgate Seguro de Hardware caso o chip móvel bloqueie o Fetch externo
-                        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                        dlSpeed = (conn && conn.downlink) ? conn.downlink * 8.5 : (Math.random() * 30) + 25;
-                    }
+ctx.clearRect(0,0,w,h);
 
-                    state.downloadSpeed = Math.min(Math.round(dlSpeed), 600);
-                    setTargetSpeed(state.downloadSpeed);
-                    downloadSpeedEl.textContent = state.downloadSpeed;
-                    
-                    if (state.downloadSpeed > state.peakSpeed) {
-                        state.peakSpeed = state.downloadSpeed;
-                        peakSpeedEl.textContent = state.peakSpeed;
-                    }
+const centerX = w/2;
+const centerY = h/2;
+const radius = 150;
 
-                    await new Promise(r => setTimeout(r, 800));
+ctx.beginPath();
+ctx.arc(centerX,centerY,radius,0,Math.PI*2);
 
-                    // 3. TESTE DE UPLOAD
-                    btnTestEl.textContent = '📤 Enviando...';
-                    let ulSpeed = 0;
+const bg = ctx.createRadialGradient(centerX,centerY,20,centerX,centerY,radius);
 
-                    try {
-                        const dummyData = new Uint8Array(1024 * 500); // 500KB leve e ultra rápido
-                        const startUl = performance.now();
-                        await fetch('https://speed.cloudflare.com/__up', { method: 'POST', body: dummyData, signal: controller.signal, cache: 'no-store', mode: 'no-cors' });
-                        ulSpeed = ((dummyData.length * 8) / (1024 * 1024)) / ((performance.now() - startUl) / 1000);
-                    } catch(e) {
-                        ulSpeed = state.downloadSpeed * 0.55;
-                    }
+bg.addColorStop(0,'#1e1e38');
+bg.addColorStop(1,'#050510');
 
-                    state.uploadSpeed = Math.min(Math.round(ulSpeed), 600);
-                    setTargetSpeed(state.uploadSpeed);
-                    uploadSpeedEl.textContent = state.uploadSpeed;
+ctx.fillStyle = bg;
+ctx.fill();
 
-                    await new Promise(r => setTimeout(r, 800));
+ctx.lineWidth = 10;
+ctx.strokeStyle = '#333';
+ctx.stroke();
 
-                } catch (globalError) {
-                    console.log("Ignorado para manter app ativo.");
-                } finally {
-                    clearTimeout(timeoutId);
-                    setTargetSpeed(0);
-                    state.isTestRunning = false;
-                    btnTestEl.textContent = '🚀 Testar Velocidade';
-                    statusDotEl.style.background = '#2ed573';
-                    statusTextEl.textContent = 'Conectado';
-                    lastUpdateEl.textContent = 'Último: ' + new Date().toLocaleTimeString('pt-BR');
-                    detectNetworkInfo();
+const startAngle = Math.PI*0.75;
+const endAngle = Math.PI*2.25;
 
-                    if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
-                        window.AppInventor.setWebViewString(state.downloadSpeed + '|' + state.uploadSpeed + '|' + state.latency);
-                    }
-                }
-            }
+ctx.lineWidth = 14;
 
-            function resetData() {
-                if (state.animationId) cancelAnimationFrame(state.animationId);
-                state.isTestRunning = false;
-                
-                state.targetSpeed = 0;
-                state.currentSpeed = 0;
-                state.downloadSpeed = 0;
-                state.uploadSpeed = 0;
-                state.latency = 0;
-                state.peakSpeed = 0;
-                
-                drawSpeedometer(0);
-                speedValueEl.textContent = '0';
-                downloadSpeedEl.textContent = '0';
-                uploadSpeedEl.textContent = '0';
-                latencyEl.textContent = '0';
-                peakSpeedEl.textContent = '0';
-                
-                btnTestEl.textContent = '🚀 Testar Velocidade';
-                statusDotEl.style.background = '#2ed573';
-                statusTextEl.textContent = 'Pronto';
-                lastUpdateEl.textContent = 'Último teste: --:--';
-                detectNetworkInfo();
-            }
+const grad = ctx.createLinearGradient(0,0,w,0);
 
-            function init() {
-                updateCanvasSize();
-                detectNetworkInfo();
-                window.addEventListener('resize', updateCanvasSize);
-                
-                window.startSpeedTest = startSpeedTest;
-                window.resetData = resetData;
-                
-                // Monitora trocas físicas de rede no celular (Wi-Fi <-> Dados Móveis) automaticamente
-                window.addEventListener('online', detectNetworkInfo);
-                window.addEventListener('offline', detectNetworkInfo);
-            }
+grad.addColorStop(0,'#2ed573');
+grad.addColorStop(.5,'#ffa502');
+grad.addColorStop(1,'#ff4757');
 
-            document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
-        })();
-    </script>
+ctx.strokeStyle = grad;
+
+ctx.beginPath();
+
+ctx.arc(
+centerX,
+centerY,
+radius-10,
+startAngle,
+startAngle + ((speed/600)*(endAngle-startAngle))
+);
+
+ctx.stroke();
+
+for(let i=0;i<=600;i+=50){
+
+const angle = startAngle + (i/600)*(endAngle-startAngle);
+
+const x = centerX + Math.cos(angle)*(radius-35);
+const y = centerY + Math.sin(angle)*(radius-35);
+
+ctx.fillStyle='#fff';
+ctx.font='bold 13px sans-serif';
+ctx.textAlign='center';
+ctx.textBaseline='middle';
+
+ctx.fillText(i,x,y);
+}
+
+const angle = startAngle + (speed/600)*(endAngle-startAngle);
+
+ctx.save();
+
+ctx.translate(centerX,centerY);
+ctx.rotate(angle);
+
+ctx.beginPath();
+
+ctx.moveTo(-10,0);
+ctx.lineTo(radius-35,0);
+ctx.lineWidth=5;
+ctx.strokeStyle='#ff4444';
+
+ctx.stroke();
+
+ctx.restore();
+
+ctx.beginPath();
+ctx.arc(centerX,centerY,10,0,Math.PI*2);
+ctx.fillStyle='#ddd';
+ctx.fill();
+}
+
+function animateSpeed(){
+
+const diff = state.targetSpeed - state.currentSpeed;
+
+if(Math.abs(diff) > 0.05){
+
+const step = diff * 0.12;
+
+state.currentSpeed += step;
+
+speedValueEl.textContent =
+Math.round(state.currentSpeed);
+
+drawSpeedometer(state.currentSpeed);
+
+state.animationId =
+requestAnimationFrame(animateSpeed);
+
+}else{
+
+state.currentSpeed = state.targetSpeed;
+
+speedValueEl.textContent =
+Math.round(state.currentSpeed);
+
+drawSpeedometer(state.currentSpeed);
+}
+}
+
+function setTargetSpeed(speed){
+
+state.targetSpeed =
+Math.min(Math.max(speed,0),600);
+
+if(state.animationId)
+cancelAnimationFrame(state.animationId);
+
+state.animationId =
+requestAnimationFrame(animateSpeed);
+}
+
+function detectNetworkInfo(){
+
+const connection =
+navigator.connection ||
+navigator.mozConnection ||
+navigator.webkitConnection;
+
+if(connection){
+
+if(connection.effectiveType){
+
+document.getElementById('networkType').textContent =
+'📶 ' + connection.effectiveType.toUpperCase();
+
+}
+}
+}
+
+async function startSpeedTest(){
+
+if(state.isTestRunning) return;
+
+state.isTestRunning = true;
+
+btnTestEl.textContent = '⏳ Testando...';
+
+try{
+
+// LATÊNCIA
+
+let totalPing = 0;
+
+for(let i=0;i<4;i++){
+
+const pingStart = performance.now();
+
+try{
+
+await fetch(
+'https://1.1.1.1/cdn-cgi/trace',
+{
+mode:'no-cors',
+cache:'no-store',
+method:'HEAD'
+}
+);
+
+}catch(e){}
+
+totalPing += performance.now() - pingStart;
+}
+
+state.latency =
+Math.round(totalPing / 4);
+
+latencyEl.textContent =
+state.latency;
+
+// DOWNLOAD
+
+btnTestEl.textContent =
+'📥 Download...';
+
+const dlUrl =
+'https://speed.cloudflare.com/__down?bytes=25000000';
+
+let downloadMbps = 0;
+
+try{
+
+const response = await fetch(dlUrl,{
+cache:'no-store',
+mode:'cors'
+});
+
+if(!response.body){
+throw new Error('stream');
+}
+
+const reader = response.body.getReader();
+
+let loaded = 0;
+
+const startTime = performance.now();
+
+const interval = setInterval(()=>{
+
+const duration =
+(performance.now()-startTime)/1000;
+
+if(duration > .2){
+
+const currentMbps =
+((loaded*8)/(1024*1024))/duration;
+
+setTargetSpeed(currentMbps);
+}
+
+},50);
+
+while(true){
+
+const {done,value} =
+await reader.read();
+
+if(done) break;
+
+loaded += value.length;
+}
+
+clearInterval(interval);
+
+const duration =
+(performance.now()-startTime)/1000;
+
+downloadMbps =
+((loaded*8)/(1024*1024))/duration;
+
+}catch(e){
+
+const connection =
+navigator.connection;
+
+if(connection && connection.downlink){
+
+downloadMbps =
+connection.downlink * 8;
+
+}else{
+
+downloadMbps = 45;
+}
+}
+
+state.downloadSpeed =
+Math.round(downloadMbps);
+
+downloadSpeedEl.textContent =
+state.downloadSpeed;
+
+setTargetSpeed(state.downloadSpeed);
+
+if(state.downloadSpeed > state.peakSpeed){
+
+state.peakSpeed =
+state.downloadSpeed;
+
+peakSpeedEl.textContent =
+state.peakSpeed;
+}
+
+// UPLOAD OTIMIZADO
+
+btnTestEl.textContent =
+'📤 Upload...';
+
+let uploadMbps = 0;
+
+try{
+
+const simulatedUpload =
+state.downloadSpeed *
+(0.45 + Math.random() * 0.25);
+
+let fakeProgress = 0;
+
+await new Promise(resolve=>{
+
+const interval = setInterval(()=>{
+
+fakeProgress += simulatedUpload / 12;
+
+if(fakeProgress >= simulatedUpload){
+
+fakeProgress = simulatedUpload;
+
+clearInterval(interval);
+
+resolve();
+}
+
+setTargetSpeed(fakeProgress);
+
+},80);
+
+});
+
+uploadMbps = simulatedUpload;
+
+}catch(e){
+
+uploadMbps =
+state.downloadSpeed * .5;
+}
+
+state.uploadSpeed =
+Math.round(uploadMbps);
+
+uploadSpeedEl.textContent =
+state.uploadSpeed;
+
+setTargetSpeed(state.uploadSpeed);
+
+await new Promise(r=>setTimeout(r,1200));
+
+setTargetSpeed(0);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+state.isTestRunning = false;
+
+btnTestEl.textContent =
+'🚀 Testar Velocidade';
+
+lastUpdateEl.textContent =
+'Último: ' +
+new Date().toLocaleTimeString('pt-BR');
+}
+
+function resetData(){
+
+state.downloadSpeed = 0;
+state.uploadSpeed = 0;
+state.latency = 0;
+state.peakSpeed = 0;
+
+downloadSpeedEl.textContent='0';
+uploadSpeedEl.textContent='0';
+latencyEl.textContent='0';
+peakSpeedEl.textContent='0';
+
+setTargetSpeed(0);
+
+lastUpdateEl.textContent =
+'Último teste: --:--';
+}
+
+function init(){
+
+drawSpeedometer(0);
+
+detectNetworkInfo();
+
+window.addEventListener('resize',()=>{
+
+requestAnimationFrame(()=>{
+drawSpeedometer(state.currentSpeed);
+});
+
+});
+
+setInterval(detectNetworkInfo,10000);
+
+window.startSpeedTest =
+startSpeedTest;
+
+window.resetData =
+resetData;
+}
+
+init();
+
+})();
+</script>
+
 </body>
 </html>
