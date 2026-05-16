@@ -1301,7 +1301,7 @@
                     peakSpeedEl.textContent = state.peakSpeed;
                 }
 
-                // 3. Medir upload
+                // 3. Medir upload (CORRIGIDO com endpoint apropriado)
                 btnTestEl.textContent = '📤 Upload...';
                 const uploadDataSizes = [500000, 1000000, 2000000]; // 500KB, 1MB, 2MB
                 let totalUploadSpeed = 0;
@@ -1313,7 +1313,7 @@
                         // Preencher com dados aleatórios para evitar compressão
                         for (let i = 0; i < dataSize; i++) uploadData[i] = Math.floor(Math.random() * 256);
                         const startTime = performance.now();
-                        await fetch('https://httpbin.org/post', {
+                        await fetch('https://speed.cloudflare.com/__up', {
                             method: 'POST',
                             body: uploadData.buffer,
                             cache: 'no-store',
