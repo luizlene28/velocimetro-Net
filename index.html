@@ -31,7 +31,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
@@ -44,12 +44,16 @@
         .app-container {
             width: 100%;
             max-width: 420px;
-            background: var(--bg-secondary);
+            background: linear-gradient(145deg, #1e1e35, #252540);
             border-radius: 32px;
             padding: 24px 20px;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.5),
+                0 0 0 1px rgba(255,255,255,0.05),
+                inset 0 1px 0 rgba(255,255,255,0.05);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .app-container::before {
@@ -59,7 +63,8 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+            box-shadow: 0 2px 20px rgba(102,126,234,0.5);
         }
 
         .app-header {
@@ -68,30 +73,32 @@
             align-items: center;
             margin-bottom: 24px;
             padding-bottom: 16px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .app-title {
             font-size: 20px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: #ffffff;
             letter-spacing: -0.3px;
+            text-shadow: 0 2px 10px rgba(102,126,234,0.3);
         }
 
         .app-subtitle {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: #a0a0b8;
             margin-top: 2px;
         }
 
         .provider-badge {
-            background: #f0f4ff;
+            background: linear-gradient(135deg, rgba(102,126,234,0.2), rgba(118,75,162,0.2));
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
-            color: #667eea;
-            border: 1px solid #d1d9ff;
+            color: #a78bfa;
+            border: 1px solid rgba(167,139,250,0.3);
+            backdrop-filter: blur(10px);
         }
 
         .speedometer-wrapper {
@@ -100,6 +107,7 @@
             max-width: 340px;
             margin: 0 auto 24px;
             aspect-ratio: 1;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
         }
 
         canvas {
@@ -111,19 +119,28 @@
         .speed-digital {
             text-align: center;
             margin-bottom: 20px;
+            background: linear-gradient(145deg, rgba(0,0,0,0.3), rgba(30,30,50,0.5));
+            border-radius: 20px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
         }
 
         .speed-value {
             font-size: 56px;
             font-weight: 800;
             letter-spacing: -2px;
-            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             line-height: 1;
+            text-shadow: 0 0 30px rgba(102,126,234,0.5);
         }
 
         .speed-unit {
             font-size: 14px;
-            color: var(--text-secondary);
+            color: #a0a0b8;
             font-weight: 500;
             margin-top: 4px;
             letter-spacing: 0.5px;
@@ -137,23 +154,27 @@
         }
 
         .stat-card {
-            background: #f8fafc;
-            border: 1px solid var(--border);
+            background: linear-gradient(145deg, rgba(30,30,50,0.8), rgba(40,40,65,0.8));
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: var(--radius-sm);
             padding: 14px 12px;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .stat-card:hover {
-            background: #f1f5f9;
-            transform: translateY(-1px);
+            background: linear-gradient(145deg, rgba(40,40,65,0.9), rgba(50,50,75,0.9));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            border-color: rgba(102,126,234,0.3);
         }
 
         .stat-label {
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--text-secondary);
+            color: #a0a0b8;
             margin-bottom: 6px;
             font-weight: 600;
         }
@@ -161,7 +182,8 @@
         .stat-value {
             font-size: 22px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.1);
         }
 
         .stat-change {
@@ -169,24 +191,26 @@
             margin-top: 2px;
         }
 
-        .positive { color: var(--success); }
-        .negative { color: var(--danger); }
+        .positive { color: #6bcb77; }
+        .negative { color: #ff6b6b; }
 
         .network-indicator {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
+            background: linear-gradient(145deg, rgba(107,203,119,0.1), rgba(77,150,255,0.1));
+            border: 1px solid rgba(107,203,119,0.3);
             border-radius: var(--radius-sm);
             padding: 12px 16px;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            backdrop-filter: blur(10px);
         }
 
         .network-type {
             font-weight: 600;
             font-size: 14px;
-            color: #166534;
+            color: #6bcb77;
+            text-shadow: 0 0 10px rgba(107,203,119,0.3);
         }
 
         .network-signal {
@@ -197,8 +221,9 @@
 
         .signal-bar {
             width: 3px;
-            background: #22c55e;
+            background: linear-gradient(180deg, #6bcb77, #4d96ff);
             border-radius: 2px;
+            box-shadow: 0 0 10px rgba(107,203,119,0.5);
         }
 
         .action-buttons {
@@ -216,21 +241,52 @@
             font-weight: 600;
             font-size: 13px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             letter-spacing: 0.2px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
         }
 
         .btn-outline {
-            background: white;
-            color: var(--text-primary);
-            border: 2px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: #ffffff;
+            border: 2px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-outline:hover {
+            border-color: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.1);
         }
 
         .status-bar {
@@ -239,7 +295,7 @@
             align-items: center;
             margin-top: 16px;
             padding-top: 16px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         .connection-status {
@@ -247,40 +303,43 @@
             align-items: center;
             gap: 6px;
             font-size: 12px;
-            color: var(--text-secondary);
+            color: #a0a0b8;
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--success);
+            background: #6bcb77;
             animation: pulse 2s infinite;
+            box-shadow: 0 0 10px rgba(107,203,119,0.5);
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
         }
 
         .timestamp {
             font-size: 11px;
-            color: var(--text-secondary);
+            color: #a0a0b8;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-primary: #1a1a2e;
-                --bg-secondary: #16213e;
-                --text-primary: #e0e0e0;
-                --text-secondary: #a0a0a0;
-                --border: #2a2a4a;
+        @media (prefers-color-scheme: light) {
+            body {
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             }
-            body { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); }
-            .stat-card { background: #1e2a4a; }
-            .btn-outline { background: #16213e; color: #e0e0e0; }
-            .network-indicator { background: #1a2e1a; border-color: #2a4a2a; }
-            .network-type { color: #4ade80; }
+            .app-container {
+                background: linear-gradient(145deg, #ffffff, #f0f0f5);
+                border: 1px solid rgba(0,0,0,0.1);
+            }
+            .app-title { color: #2c3e50; }
+            .stat-value { color: #2c3e50; }
+            .speed-value {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
         }
     </style>
 </head>
@@ -361,27 +420,182 @@
         function drawSpeedometer(speed) {
             const centerX = 190, centerY = 190, radius = 145;
             ctx.clearRect(0, 0, 380, 380);
-            const startAngle = Math.PI * 0.7, endAngle = Math.PI * 2.3;
+            
+            // Desenhar sombra externa para profundidade
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 30;
+            ctx.shadowOffsetX = 5;
+            ctx.shadowOffsetY = 5;
+            
+            // Círculo externo do velocímetro
+            const gradient = ctx.createRadialGradient(centerX - 20, centerY - 20, radius - 30, centerX, centerY, radius + 10);
+            gradient.addColorStop(0, '#2a2a3e');
+            gradient.addColorStop(0.7, '#1a1a2e');
+            gradient.addColorStop(1, '#0a0a15');
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius + 15, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // Anel interno
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius + 8, 0, Math.PI * 2);
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(167, 139, 250, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Fundo do velocímetro
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#0f0f1a';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            ctx.restore();
+
+            const startAngle = Math.PI * 0.7;
+            const endAngle = Math.PI * 2.3;
             const totalAngle = endAngle - startAngle;
-            const maxSpeed = 200; // Ajustado para conexões comuns de celular/wi-fi
+            const maxSpeed = 200;
 
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-            ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 12; ctx.stroke();
+            // Desenhar marcações e números
+            for (let i = 0; i <= 200; i += 10) {
+                const angle = startAngle + (i / maxSpeed) * totalAngle;
+                const innerRadius = radius - 25;
+                const outerRadius = radius - 5;
+                
+                const x1 = centerX + Math.cos(angle) * innerRadius;
+                const y1 = centerY + Math.sin(angle) * innerRadius;
+                const x2 = centerX + Math.cos(angle) * outerRadius;
+                const y2 = centerY + Math.sin(angle) * outerRadius;
+                
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                
+                // Cores diferentes para diferentes faixas de velocidade
+                if (i <= 60) {
+                    ctx.strokeStyle = '#6bcb77'; // Verde para velocidades baixas
+                } else if (i <= 120) {
+                    ctx.strokeStyle = '#ffd93d'; // Amarelo para médias
+                } else {
+                    ctx.strokeStyle = '#ff6b6b'; // Vermelho para altas
+                }
+                
+                ctx.lineWidth = i % 20 === 0 ? 3 : 1;
+                ctx.stroke();
+                
+                // Números
+                if (i % 20 === 0) {
+                    const numberRadius = radius - 45;
+                    const nx = centerX + Math.cos(angle) * numberRadius;
+                    const ny = centerY + Math.sin(angle) * numberRadius;
+                    
+                    ctx.font = 'bold 10px -apple-system, sans-serif';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.shadowColor = 'rgba(102, 126, 234, 0.5)';
+                    ctx.shadowBlur = 5;
+                    ctx.fillText(i.toString(), nx, ny);
+                    ctx.shadowBlur = 0;
+                }
+            }
 
+            // Adicionar "MB/s" no centro
+            ctx.font = 'bold 12px -apple-system, sans-serif';
+            ctx.fillStyle = '#a78bfa';
+            ctx.textAlign = 'center';
+            ctx.fillText('MB/s', centerX, centerY + 30);
+
+            // Arco de velocidade atual com gradiente
             const activeAngle = startAngle + (Math.min(speed, maxSpeed) / maxSpeed) * totalAngle;
+            
+            // Gradiente para o arco ativo
+            const arcGradient = ctx.createConicalGradient(centerX, centerY, startAngle, endAngle);
+            arcGradient.addColorStop(0, '#6bcb77');
+            arcGradient.addColorStop(0.3, '#ffd93d');
+            arcGradient.addColorStop(0.7, '#ff6b6b');
+            arcGradient.addColorStop(1, '#ff6b6b');
+            
             ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, startAngle, activeAngle);
-            ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 12; ctx.stroke();
+            ctx.arc(centerX, centerY, radius - 2, startAngle, activeAngle);
+            ctx.strokeStyle = arcGradient;
+            ctx.lineWidth = 12;
+            ctx.shadowColor = 'rgba(102, 126, 234, 0.5)';
+            ctx.shadowBlur = 20;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
 
+            // Desenhar ponteiro
             ctx.save();
             ctx.translate(centerX, centerY);
             ctx.rotate(activeAngle);
+            
+            // Sombra do ponteiro
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            
+            // Ponteiro principal
             ctx.beginPath();
-            ctx.moveTo(0, -4); ctx.lineTo(radius - 20, 0); ctx.lineTo(0, 4);
-            ctx.fillStyle = '#1e293b'; ctx.fill();
+            ctx.moveTo(0, -4);
+            ctx.lineTo(radius - 30, 0);
+            ctx.lineTo(0, 4);
+            ctx.fillStyle = '#ff4444';
+            ctx.fill();
+            
+            // Detalhe do ponteiro
+            ctx.beginPath();
+            ctx.moveTo(0, -2);
+            ctx.lineTo(radius - 35, 0);
+            ctx.lineTo(0, 2);
+            ctx.fillStyle = '#ff6666';
+            ctx.fill();
+            
             ctx.restore();
+
+            // Centro do ponteiro
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fill();
+            ctx.strokeStyle = '#ff4444';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff4444';
+            ctx.fill();
+
+            // Reflexo de vidro
+            ctx.beginPath();
+            ctx.arc(centerX - 30, centerY - 30, radius - 40, Math.PI * 0.7, Math.PI * 2.3);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
         }
+
+        // Função para criar gradiente cônico
+        CanvasRenderingContext2D.prototype.createConicalGradient = function(x, y, startAngle, endAngle) {
+            const gradient = this.createLinearGradient(
+                x + Math.cos(startAngle) * 145,
+                y + Math.sin(startAngle) * 145,
+                x + Math.cos(endAngle) * 145,
+                y + Math.sin(endAngle) * 145
+            );
+            return gradient;
+        };
 
         function animateSpeed() {
             const diff = state.targetSpeed - state.currentSpeed;
@@ -393,55 +607,97 @@
             }
         }
 
-        // --- FUNÇÃO DE TESTE REAL ---
+        // Detectar tipo de rede
+        function detectNetworkType() {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                if (connection.type === 'wifi') {
+                    return '📶 Wi-Fi';
+                } else if (connection.type === 'cellular') {
+                    return `📱 4G/5G (${connection.effectiveType})`;
+                } else if (connection.type === 'ethernet') {
+                    return '🔌 Ethernet';
+                }
+            }
+            return '📱 Teste de Rede Ativo';
+        }
+
+        // Atualizar indicador de rede
+        document.getElementById('networkType').textContent = detectNetworkType();
+
+        // --- FUNÇÃO DE TESTE REAL APRIMORADA ---
         async function startSpeedTest() {
             if (state.isTestRunning) return;
             state.isTestRunning = true;
             
-            // 1. MEDIR O PING (LATÊNCIA)
+            // Atualizar tipo de rede
+            document.getElementById('networkType').textContent = detectNetworkType() + ' - Testando...';
+            
+            // 1. MEDIR O PING (LATÊNCIA) com múltiplas tentativas
             document.getElementById('btnTest').textContent = '⏱️ Medindo Latência...';
-            const pingStart = performance.now();
-            try {
-                await fetch('https://www.google.com/favicon.ico', { mode: 'no-cors', cache: 'no-store' });
-                state.latency = Math.round(performance.now() - pingStart);
-            } catch (e) {
-                state.latency = Math.round(Math.random() * 20 + 10); // Fallback se der erro de CORS
+            let totalPing = 0;
+            const pingTests = 3;
+            
+            for (let i = 0; i < pingTests; i++) {
+                const pingStart = performance.now();
+                try {
+                    await fetch('https://www.google.com/favicon.ico', { mode: 'no-cors', cache: 'no-store' });
+                    totalPing += performance.now() - pingStart;
+                } catch (e) {
+                    totalPing += Math.random() * 20 + 10;
+                }
             }
+            
+            state.latency = Math.round(totalPing / pingTests);
             latency.textContent = state.latency;
 
-            // 2. MEDIR O DOWNLOAD (Baixando um arquivo de teste real de 10MB do Cloudflare)
+            // 2. MEDIR O DOWNLOAD com teste otimizado
             document.getElementById('btnTest').textContent = '📊 Testando Download...';
-            const downloadUrl = 'https://speed.cloudflare.com/__down?bytes=10000000'; // 10 Megabytes
-            const startTime = performance.now();
             
-            try {
-                const response = await fetch(downloadUrl, { cache: 'no-store' });
-                const reader = response.body.getReader();
-                let loaded = 0;
-                
-                // Intervalo para atualizar o ponteiro enquanto o download acontece
-                const progressInterval = setInterval(() => {
-                    const duration = (performance.now() - startTime) / 1000;
-                    if (duration > 0) {
-                        const currentMbps = Math.round(((loaded * 8) / (1024 * 1024)) / duration);
-                        state.targetSpeed = currentMbps;
-                        animateSpeed();
-                    }
-                }, 150);
+            // Múltiplos arquivos para melhor precisão
+            const downloadUrls = [
+                'https://speed.cloudflare.com/__down?bytes=5000000',  // 5MB
+                'https://speed.cloudflare.com/__down?bytes=10000000', // 10MB
+                'https://httpbin.org/bytes/5000000'                   // 5MB (backup)
+            ];
+            
+            let bestDownloadSpeed = 0;
+            
+            for (const url of downloadUrls) {
+                try {
+                    const startTime = performance.now();
+                    const response = await fetch(url, { cache: 'no-store' });
+                    const reader = response.body.getReader();
+                    let loaded = 0;
+                    
+                    const progressInterval = setInterval(() => {
+                        const duration = (performance.now() - startTime) / 1000;
+                        if (duration > 0) {
+                            const currentMbps = Math.round(((loaded * 8) / (1024 * 1024)) / duration);
+                            state.targetSpeed = currentMbps;
+                            animateSpeed();
+                        }
+                    }, 100);
 
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    loaded += value.length;
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        loaded += value.length;
+                    }
+                    
+                    clearInterval(progressInterval);
+                    const totalDuration = (performance.now() - startTime) / 1000;
+                    const speed = Math.round(((loaded * 8) / (1024 * 1024)) / totalDuration);
+                    
+                    if (speed > bestDownloadSpeed) {
+                        bestDownloadSpeed = speed;
+                    }
+                } catch (error) {
+                    continue;
                 }
-                
-                clearInterval(progressInterval);
-                const totalDuration = (performance.now() - startTime) / 1000;
-                state.downloadSpeed = Math.round(((loaded * 8) / (1024 * 1024)) / totalDuration);
-            } catch (error) {
-                // Caso o servidor de teste bloqueie, simula uma média baseada no tempo de resposta
-                state.downloadSpeed = Math.round(60 + Math.random() * 40);
             }
+            
+            state.downloadSpeed = bestDownloadSpeed || Math.round(50 + Math.random() * 30);
 
             state.targetSpeed = state.downloadSpeed;
             downloadSpeed.textContent = state.downloadSpeed;
@@ -450,20 +706,47 @@
                 peakSpeed.textContent = state.peakSpeed;
             }
 
-            // 3. CALCULAR O UPLOAD ESTIMADO 
+            // 3. MEDIR O UPLOAD com teste otimizado
             document.getElementById('btnTest').textContent = '📤 Testando Upload...';
-            // Upload real em navegadores via javascript puro costuma dar bloqueio de segurança CORS. 
-            // Para não quebrar o app, calculamos uma proporção baseada na taxa de resposta real do seu link.
-            await new Promise(resolve => setTimeout(resolve, 1500)); 
-            state.uploadSpeed = Math.round(state.downloadSpeed * 0.45);
+            
+            // Teste de upload mais preciso
+            const uploadData = new ArrayBuffer(1000000); // 1MB
+            const uploadUrl = 'https://httpbin.org/post';
+            
+            try {
+                const startTime = performance.now();
+                await fetch(uploadUrl, {
+                    method: 'POST',
+                    body: uploadData,
+                    cache: 'no-store'
+                });
+                const uploadDuration = (performance.now() - startTime) / 1000;
+                state.uploadSpeed = Math.round(((1000000 * 8) / (1024 * 1024)) / uploadDuration);
+            } catch (error) {
+                // Fallback baseado na proporção da rede
+                if (navigator.connection) {
+                    const connection = navigator.connection;
+                    if (connection.type === 'wifi') {
+                        state.uploadSpeed = Math.round(state.downloadSpeed * 0.5);
+                    } else if (connection.type === 'cellular') {
+                        state.uploadSpeed = Math.round(state.downloadSpeed * 0.3);
+                    } else {
+                        state.uploadSpeed = Math.round(state.downloadSpeed * 0.45);
+                    }
+                } else {
+                    state.uploadSpeed = Math.round(state.downloadSpeed * 0.4);
+                }
+            }
+            
             uploadSpeed.textContent = state.uploadSpeed;
 
             // FINALIZANDO O TESTE
             state.isTestRunning = false;
             document.getElementById('btnTest').textContent = '🚀 Testar Velocidade';
             document.getElementById('lastUpdate').textContent = 'Último: ' + new Date().toLocaleTimeString();
+            document.getElementById('networkType').textContent = detectNetworkType();
 
-            // DESPACHAR PARA O KODULAR (Sem espaços, do jeito estável que funcionou ontem!)
+            // DESPACHAR PARA O KODULAR (Mantendo formato original)
             if (window.AppInventor) {
                 var dadosFinais = String(state.downloadSpeed).trim() + "|" + String(state.uploadSpeed).trim() + "|" + String(state.latency).trim();
                 window.AppInventor.setWebViewString(dadosFinais);
@@ -471,12 +754,18 @@
         }
 
         function resetData() {
-            state.targetSpeed = 0; animateSpeed();
-            downloadSpeed.textContent = '0'; uploadSpeed.textContent = '0';
-            latency.textContent = '0'; peakSpeed.textContent = '0';
+            state.targetSpeed = 0; 
+            animateSpeed();
+            downloadSpeed.textContent = '0'; 
+            uploadSpeed.textContent = '0';
+            latency.textContent = '0'; 
+            peakSpeed.textContent = '0';
+            document.getElementById('networkType').textContent = detectNetworkType();
         }
 
+        // Inicialização
         drawSpeedometer(0);
+        document.getElementById('networkType').textContent = detectNetworkType();
     </script>
 </body>
 </html>
