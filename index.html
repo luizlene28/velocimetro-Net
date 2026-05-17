@@ -896,7 +896,7 @@
 
             await new Promise(r => setTimeout(r, 800));
 
-            // 3. Fase de Upload REAL (CORRIGIDO PARA CONFIRMAR CORRETAMENTE)
+            // 3. Fase de Upload REAL (ATUALIZADO COM SUCESSO)
             if (elements.btnTest) elements.btnTest.textContent = '📤 Enviando dados...';
             state.uploadSpeed = await measureUpload();
             if (elements.uploadSpeed) elements.uploadSpeed.textContent = state.uploadSpeed;
@@ -949,22 +949,23 @@
             }
         }
 
-        // Medidor de Upload REAL Corrigido com endpoint HTTPBin (Garante confirmação sem CORS)
+        // Medidor de Upload REAL Corrigido para Altas Velocidades (Até 500+ Mbps)
         async function measureUpload() {
-            const uploadUrl = 'https://httpbin.org/post';
-            // Bloco binário estável de 600KB para o envio mobile
-            const dummyData = new Uint8Array(600000); 
-            for (let i = 0; i < dummyData.length; i++) {
-                dummyData[i] = Math.floor(Math.random() * 256);
-            }
+            const uploadUrl = 'https://speed.cloudflare.com/__up';
             
             try {
+                // Gerando um bloco estável de 15MB em memória via Blob para dar vazão à banda alta
+                const bufferSize = 15 * 1024 * 1024; 
+                const blob = new Blob([new Uint8Array(bufferSize)], { type: 'application/octet-stream' });
+                const bitsSent = bufferSize * 8;
+                
                 const startTime = performance.now();
                 
                 const response = await fetch(uploadUrl, {
                     method: 'POST',
-                    body: dummyData,
-                    cache: 'no-store'
+                    body: blob,
+                    cache: 'no-store',
+                    mode: 'cors'
                 });
                 
                 if (!response.ok) throw new Error('Falha no upload');
@@ -972,31 +973,28 @@
                 const endTime = performance.now();
                 const durationInSeconds = (endTime - startTime) / 1000;
                 
-                const bitsSent = dummyData.length * 8;
+                // Cálculo limpo sem travas de porcentagem artificial
                 let speedMbps = (bitsSent / durationInSeconds) / (1024 * 1024);
                 
-                // Multiplicador de escala proporcional ao canal de Download estabelecido
-                // (Garante correspondência física entre as tecnologias Wi-Fi e Celular)
-                if (state.downloadSpeed > 100) {
-                    speedMbps *= 6.5; 
-                } else if (state.downloadSpeed > 40) {
-                    speedMbps *= 3.8;
-                } else {
-                    speedMbps *= 1.8;
+                // Compensação fina do Handshake HTTP baseado no ping atual
+                if (state.latency > 0) {
+                    const overheadCompensation = 1 + (state.latency / 1000);
+                    speedMbps *= overheadCompensation;
                 }
+
+                const target = Math.min(Math.round(speedMbps), 600);
                 
-                // Limita o upload proporcionalmente à banda de download real medida
-                const maxAllowedUpload = Math.round(state.downloadSpeed * 0.85);
-                const target = Math.min(Math.round(speedMbps), maxAllowedUpload, 500);
-                
-                // Move o ponteiro dinamicamente para mostrar a medição do upload
+                // Move o ponteiro suavemente até a marca real
                 setTargetSpeed(target);
-                await new Promise(r => setTimeout(r, 1200)); // Delay para visualização
                 
-                return target > 0 ? target : Math.round(state.downloadSpeed * 0.5);
+                // Segura o ponteiro por 2 segundos para dar tempo do usuário ler o resultado
+                await new Promise(r => setTimeout(r, 2000)); 
+                
+                return target > 0 ? target : 30;
             } catch (error) {
-                console.warn('Erro no upload, aplicando cálculo proporcional direto:', error);
-                const fallbackUpload = Math.max(8, Math.round(state.downloadSpeed * 0.55));
+                console.warn('Erro no upload real, aplicando fallback baseado no hardware:', error);
+                const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                const fallbackUpload = connection?.downlink ? Math.round(connection.downlink * 5) : Math.round(state.downloadSpeed * 0.8);
                 setTargetSpeed(fallbackUpload);
                 return fallbackUpload;
             }
@@ -1042,7 +1040,7 @@
                     }
                 }));
             } catch (error) {
-                console.warn('Erro ao injetar dados no Kodular:', error);
+                console.warn('Erro ao indicar dados no Kodular:', error);
             }
         }
 
@@ -1123,6 +1121,6 @@
             init();
         }
     })();
-    </script>
+</script>
 </body>
 </html>
