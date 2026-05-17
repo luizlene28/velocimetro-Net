@@ -1018,14 +1018,16 @@
             setTargetSpeed(state.downloadSpeed);
         }
 
-        // ============ COMUNICAÇÃO COM KODULAR ============
+       // ============ COMUNICAÇÃO COM KODULAR ATUALIZADA ============
         function sendDataToKodular() {
             try {
                 if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+                    // Juntamos o tipo de rede atualizado como a 4ª informação da lista
                     const dadosFinais = [
                         String(state.downloadSpeed || 0).trim(),
                         String(state.uploadSpeed || 0).trim(),
-                        String(state.latency || 0).trim()
+                        String(state.latency || 0).trim(),
+                        String(state.networkTypeStr || 'Desconhecido').trim()
                     ].join('|');
                     
                     window.AppInventor.setWebViewString(dadosFinais);
@@ -1044,7 +1046,7 @@
                     }
                 }));
             } catch (error) {
-                console.warn('Erro ao indicar dados no Kodular:', error);
+                console.warn('Erro ao injetar dados no Kodular:', error);
             }
         }
 
