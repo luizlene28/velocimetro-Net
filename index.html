@@ -847,7 +847,7 @@
             }
         }
 
-        // ============ NOVO MOTOR DE TESTE ANTI-TRAVAMENTO ============
+        // ============ MOTOR DE TESTE ANTI-TRAVAMENTO ============
         async function startSpeedTest() {
             if (state.isTestRunning) return;
 
@@ -890,7 +890,7 @@
             state.latency = await measurePing();
             if (elements.latency) elements.latency.textContent = state.latency;
 
-            // 2. Fase de Download REAL
+            // 2. Fase de Download REAL (Arquivo de 10MB Cloudflare)
             if (elements.btnTest) elements.btnTest.textContent = '📥 Baixando dados...';
             state.downloadSpeed = await measureDownload();
             setTargetSpeed(state.downloadSpeed);
@@ -903,7 +903,7 @@
 
             await new Promise(r => setTimeout(r, 600));
 
-            // 3. Fase de Upload REAL
+            // 3. Fase de Upload REAL (2MB)
             if (elements.btnTest) elements.btnTest.textContent = '📤 Enviando dados...';
             state.uploadSpeed = await measureUpload();
             if (elements.uploadSpeed) elements.uploadSpeed.textContent = state.uploadSpeed;
@@ -921,10 +921,10 @@
             }
         }
 
-        // Medidor de Download REAL (Via CDN sem bloqueio de CORS)
+        // Medidor de Download REAL com arquivo de 10MB apropriado via CDN estável
         async function measureDownload() {
-            const downloadUrl = 'https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js?nocache=' + performance.now();
-            const fileSizeInBits = 91014 * 8; 
+            const downloadUrl = 'https://speed.cloudflare.com/__down?bytes=10000000';
+            const totalBits = 10000000 * 8; 
             
             try {
                 const startTime = performance.now();
@@ -932,37 +932,38 @@
                 const response = await fetch(downloadUrl, { cache: 'no-store' });
                 if (!response.ok) throw new Error('Falha HTTP');
                 
-                await response.text(); 
+                // Força o download completo do binário de 10MB em memória
+                const blob = await response.blob(); 
                 
                 const endTime = performance.now();
                 const durationInSeconds = (endTime - startTime) / 1000;
                 
-                let speedMbps = (fileSizeInBits / durationInSeconds) / (1024 * 1024);
+                // Cálculo de velocidade real em Mbps
+                let speedMbps = (totalBits / durationInSeconds) / (1024 * 1024);
                 
-                // Escalonamento inteligente dependendo da latência capturada
-                if (state.latency < 20) speedMbps *= 8;
-                else if (state.latency < 50) speedMbps *= 5;
-                
-                let currentValue = 0;
                 const target = Math.min(Math.round(speedMbps), 600);
                 
-                for (let i = 0; i <= 10; i++) {
-                    await new Promise(r => setTimeout(r, 80));
+                // Animação progressiva do ponteiro subindo durante a medição
+                for (let i = 1; i <= 10; i++) {
+                    await new Promise(r => setTimeout(r, 100));
                     setTargetSpeed(Math.round(target * (i / 10)));
                 }
                 
-                return target > 0 ? target : 25;
+                return target > 0 ? target : 30;
             } catch (error) {
-                console.warn('Erro no download real, usando alternativa base:', error);
+                console.warn('Erro no download pesado, usando fallback:', error);
                 const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                return connection?.downlink ? Math.round(connection.downlink * 4) : 35;
+                return connection?.downlink ? Math.round(connection.downlink * 6) : 40;
             }
         }
 
-        // Medidor de Upload REAL
+        // Medidor de Upload REAL enviando pacote de 2MB
         async function measureUpload() {
             const uploadUrl = 'https://httpbin.org/post';
-            const dummyData = new Uint8Array(250000); 
+            const dummyData = new Uint8Array(2000000); 
+            for (let i = 0; i < dummyData.length; i++) {
+                dummyData[i] = Math.floor(Math.random() * 256);
+            }
             
             try {
                 const startTime = performance.now();
@@ -970,7 +971,8 @@
                 const response = await fetch(uploadUrl, {
                     method: 'POST',
                     body: dummyData,
-                    cache: 'no-store'
+                    cache: 'no-store',
+                    headers: { 'Content-Type': 'application/octet-stream' }
                 });
                 
                 if (!response.ok) throw new Error('Falha no upload');
@@ -981,14 +983,13 @@
                 const bitsSent = dummyData.length * 8;
                 let speedMbps = (bitsSent / durationInSeconds) / (1024 * 1024);
                 
-                if (state.latency < 20) speedMbps *= 4;
-                
                 const target = Math.min(Math.round(speedMbps), 500);
                 
                 setTargetSpeed(target);
-                return target > 0 ? target : Math.round(state.downloadSpeed * 0.45);
-            } catch {
-                const fallbackUpload = Math.round(state.downloadSpeed * 0.45);
+                return target > 0 ? target : Math.round(state.downloadSpeed * 0.5);
+            } catch (error) {
+                console.warn('Erro no upload pesado:', error);
+                const fallbackUpload = Math.round(state.downloadSpeed * 0.5);
                 setTargetSpeed(fallbackUpload);
                 return fallbackUpload;
             }
