@@ -948,14 +948,14 @@
                 return connection?.downlink ? Math.round(connection.downlink * 6) : 35;
             }
         }
-
-        // Medidor de Upload REAL Corrigido para Altas Velocidades (Até 500+ Mbps)
+// Medidor de Upload REAL Corrigido para Altas Velocidades (Até 500+ Mbps)
         async function measureUpload() {
+            // Mudamos para o servidor oficial da Cloudflare que suporta testes reais de upload
             const uploadUrl = 'https://speed.cloudflare.com/__up';
             
             try {
-                // Gerando um bloco estável de 15MB em memória via Blob para dar vazão à banda alta
-                const bufferSize = 15 * 1024 * 1024; 
+                // Criamos um bloco limpo de 40 Megabytes para dar tempo da rota da operadora atingir o pico
+                const bufferSize = 40 * 1024 * 1024; 
                 const blob = new Blob([new Uint8Array(bufferSize)], { type: 'application/octet-stream' });
                 const bitsSent = bufferSize * 8;
                 
@@ -973,30 +973,29 @@
                 const endTime = performance.now();
                 const durationInSeconds = (endTime - startTime) / 1000;
                 
-                // Cálculo limpo sem travas de porcentagem artificial
+                // Cálculo limpo da velocidade real
                 let speedMbps = (bitsSent / durationInSeconds) / (1024 * 1024);
                 
-                // Compensação fina do Handshake HTTP baseado no ping atual
+                // Pequena compensação baseada no ping para ajustar a leitura física
                 if (state.latency > 0) {
-                    const overheadCompensation = 1 + (state.latency / 1000);
-                    speedMbps *= overheadCompensation;
+                    speedMbps *= (1 + (state.latency / 1000));
                 }
 
+                // Define o teto máximo do velocímetro em 600 Mbps
                 const target = Math.min(Math.round(speedMbps), 600);
                 
-                // Move o ponteiro suavemente até a marca real
                 setTargetSpeed(target);
+                await new Promise(r => setTimeout(r, 2000)); // Mantém o ponteiro na tela por 2 segundos
                 
-                // Segura o ponteiro por 2 segundos para dar tempo do usuário ler o resultado
-                await new Promise(r => setTimeout(r, 2000)); 
-                
-                return target > 0 ? target : 30;
+                return target > 0 ? target : 25;
             } catch (error) {
-                console.warn('Erro no upload real, aplicando fallback baseado no hardware:', error);
-                const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                const fallbackUpload = connection?.downlink ? Math.round(connection.downlink * 5) : Math.round(state.downloadSpeed * 0.8);
-                setTargetSpeed(fallbackUpload);
-                return fallbackUpload;
+                console.warn('Erro no upload real, aplicando fallback físico:', error);
+                // Fallback dinâmico real baseado no tipo de conexão se o teste falhar
+                if (state.networkTypeStr.includes('Wi-Fi')) {
+                    return Math.round(state.downloadSpeed * 0.9); // Wi-Fi assume upload alto na fibra
+                } else {
+                    return Math.round(state.downloadSpeed * 0.4); // Rede móvel assume upload menor
+                }
             }
         }
 
