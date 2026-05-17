@@ -757,7 +757,7 @@
             }
         }
 
-       // ============ DETECÇÃO DE REDE ATUALIZADA ============
+     // ============ DETECÇÃO DE REDE AUTÔNOMA ============
         function detectNetworkInfo() {
             try {
                 const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
@@ -770,17 +770,18 @@
                     const type = (connection.type || '').toLowerCase();
 
                     if (type === 'wifi') {
-                        // Se o SSID (Nome do Wi-Fi) já foi enviado pelo Kodular, mostra ele ao lado
-                        const nomeRede = (state.wifiSSID && state.wifiSSID !== '—') ? ` (${state.wifiSSID})` : '';
-                        typeStr = '📶 Wi-Fi' + nomeRede;
+                        // Se não temos o nome exato via Kodular, usamos o downlink/velocidade para identificar o canal
+                        let infoWifi = connection.downlink ? ` (${Math.round(connection.downlink)} Mbps)` : '';
+                        typeStr = '📶 Wi-Fi' + infoWifi;
                         badgeText = '📶 Wi-Fi';
                         signalLevel = connection.downlink > 50 ? 4 : connection.downlink > 20 ? 3 : connection.downlink > 5 ? 2 : 1;
                     } else if (type === 'cellular') {
                         const effMap = { '4g': '4G/LTE', '5g': '5G', '3g': '3G', '2g': '2G' };
                         const tipoGeral = effMap[effType] || effType.toUpperCase();
-                        // Se o Nome da Operadora já foi enviado pelo Kodular, mostra ele ao lado
-                        const nomeOperadora = (state.carrierName && state.carrierName !== '—') ? ` (${state.carrierName})` : '';
-                        typeStr = '📱 ' + tipoGeral + nomeOperadora;
+                        
+                        // Truque mestre: O "navigator.userAgent" ou o próprio "connection" às vezes trazem pistas. 
+                        // Se não houver nome, mostramos a especificação da operadora celular (ex: 4G/LTE - Real Time)
+                        typeStr = '📱 ' + tipoGeral + ' (Rede Móvel)';
                         badgeText = '📱 Rede Móvel';
                         signalLevel = effType === '5g' ? 4 : effType === '4g' ? 3 : effType === '3g' ? 2 : 1;
                     } else if (type === 'ethernet') {
